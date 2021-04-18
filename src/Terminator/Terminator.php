@@ -2,4 +2,6 @@
 
 namespace Terminator\Terminator;
 
-final class ProcessTerminator {}
+final class ProcessTerminator
+{
+}
