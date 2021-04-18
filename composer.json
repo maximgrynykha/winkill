@@ -1,0 +1,46 @@
+{
+    "name": "ismaxim/terminator",
+    "description": "Terminate OS processes in PHP",
+    "type": "library",
+    "license": "MIT",
+    "keywords": [
+        "os", 
+        "php",
+        "kill", 
+        "terminate",
+        "processes"
+    ],
+    "homepage": "https://github.com/ismaxim/terminator",
+    "authors": [
+        {
+            "name": "Maxim Grynykha",
+            "email": "gr.gromax@gmail.com",
+            "homepage": "https://github.com/ismaxim"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": "^7.4|^8.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5.0",
+        "phpstan/phpstan": "^0.12.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Terminator\\": "src/Terminator"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": { 
+            "Terminator\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit tests",
+        "phpstan": "vendor/bin/phpstan analyse"
+    },
+    "config": {
+        "process-timeout": 0
+    }
+}

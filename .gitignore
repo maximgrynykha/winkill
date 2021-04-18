@@ -1,0 +1,12 @@
+# Dirs
+.vscode
+vendor
+test-reports
+
+# Dotfiles
+.phpunit.result.cache
+
+# Regular files
+composer.lock
+coverage.xml
+phpunit.xml.dist.bak

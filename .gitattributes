@@ -1,0 +1,31 @@
+# Configure which ending of files will be used for the repo
+# on a diffent machines, when anyone will create or modify the files 
+* text=auto
+
+*.php text
+*.png binary
+*.jpg binary
+
+# Configure diff output for .php and .phar files.
+*.php         diff=php
+*.phar        -diff
+composer.lock -diff
+
+# Exclude build/test files from archive
+
+# Dirs
+tests             export-ignore
+assets            export-ignore  
+.github           export-ignore
+
+# Dotfiles
+.editorconfig     export-ignore
+.gitattributes    export-ignore
+.gitignore        export-ignore
+.styleci.yml      export-ignore
+
+# Regular files
+composer.lock     export-ignore
+coverage.xml      export-ignore
+phpunit.xml.dist  export-ignore
+phpstan.neon.dist export-ignore
