@@ -112,10 +112,7 @@ array_walk($processes_ids = [1000, 5595, 17820],
 
 usort(
     $processes->where(Attributes::consumed_memory(), 3000, ">=")->get(), 
-    function (
-        \Terminator\Kernel\Process $process, 
-        \Terminator\Kernel\Process $_process
-    ) {
+    function (Process $process, Process $_process) {
         return $process->consumed_memory > $_process->consumed_memory;
 });
 
@@ -123,10 +120,7 @@ usort(
 
 usort(
     $processes->where(Attributes::consumed_memory(), 3000, ">=")->get(), 
-    function (
-        \Terminator\Kernel\Process $process, 
-        \Terminator\Kernel\Process $_process
-    ) {
+    function (Process $process, Process $_process) {
         return $process->consumed_memory < $_process->consumed_memory;
 });
 ```
