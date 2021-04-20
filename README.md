@@ -21,11 +21,6 @@ $processes = new Processes;
 // Get all active processes
 print_r($processes->get());
 
-// OR
-
-// Update all active processes
-print_r($processes->update());
-
 /* 
     OUTPUT FORMAT: 
 
