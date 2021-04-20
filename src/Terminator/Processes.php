@@ -73,7 +73,10 @@ final class Processes
             switch ($attr_name) {
                 case $attr_name->value === "process_name"
                      && mb_strpos((string) $attr_value, ".") === false:
-                    if (in_array($attr_value, explode(".", $process->process_name))) {
+                    $process_name = mb_strtolower($process->{$attr_name});
+                    $attr_value = mb_strtolower((string) $attr_value);
+
+                    if (in_array($attr_value, explode(".", $process_name))) {
                         $this->whereable[] = $process;
                     }
                     break;
