@@ -93,7 +93,7 @@ $processes->where(Attributes::consumed_memory(), 128920)
 // Terminate processes by an array of process names *(all names is example)
 
 array_walk($processes_names = ["chrome", "firefox", "slack"], 
-    fn($process_name) => $processes
+    fn(string $process_name) => $processes
         ->where(Attributes::process_name(), $process_name)
         ->terminate()
 );
@@ -101,7 +101,7 @@ array_walk($processes_names = ["chrome", "firefox", "slack"],
 // Terminate processes by an array of process ids *(all ids is example)
 
 array_walk($processes_ids = [1000, 5595, 17820], 
-    fn($process_id) => $processes
+    fn(int $process_id) => $processes
         ->where(Attributes::process_id(), $process_id)
         ->terminate()
 );
@@ -112,17 +112,17 @@ array_walk($processes_ids = [1000, 5595, 17820],
 
 usort(
     $processes->where(Attributes::consumed_memory(), 3000, ">=")->get(), 
-    function (Process $process, Process $_process) {
-        return $process->consumed_memory > $_process->consumed_memory;
-});
+    fn (Process $process, Process $_process) =>
+        $process->consumed_memory > $_process->consumed_memory;
+);
 
 // Sort processes on consumed memory by DESC
 
 usort(
     $processes->where(Attributes::consumed_memory(), 3000, ">=")->get(), 
-    function (Process $process, Process $_process) {
-        return $process->consumed_memory < $_process->consumed_memory;
-});
+    fn (Process $process, Process $_process) =>
+        $process->consumed_memory < $_process->consumed_memory;
+);
 ```
 
 ## 🧪 Testing
