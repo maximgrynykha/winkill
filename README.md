@@ -21,8 +21,13 @@ $processes = new Processes;
 // Get all active processes
 print_r($processes->get());
 
+// OR
+
+// Update all active processes
+print_r($processes->update());
+
 /* 
-    RESULT: 
+    OUTPUT FORMAT: 
 
     [0] => Terminator\Kernel\Process Object
         (
@@ -85,7 +90,7 @@ $processes->where(Attributes::consumed_memory(), 128920)
     use native PHP functions array_map() either array_walk():
 */
 
-// Terminate processes by an array of the process of names *(all names is example)
+// Terminate processes by an array of process names *(all names is example)
 
 array_walk($processes_names = ["chrome", "firefox", "slack"], 
     fn($process_name) => $processes
@@ -93,7 +98,7 @@ array_walk($processes_names = ["chrome", "firefox", "slack"],
         ->terminate()
 );
 
-// Terminate processes by an array of the process of ids *(all ids is example)
+// Terminate processes by an array of process ids *(all ids is example)
 
 array_walk($processes_ids = [1000, 5595, 17820], 
     fn($process_id) => $processes
