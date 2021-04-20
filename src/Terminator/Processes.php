@@ -56,7 +56,7 @@ final class Processes
      * @param \Terminator\Kernel\Enums\Attributes $attr_name
      * @param int|string $attr_value
      * @param int|string|null $optional
-     * 
+     *
      * @return self
      */
     public function where(Attributes $attr_name, $attr_value, $optional = null): self
@@ -71,27 +71,27 @@ final class Processes
             }
 
             switch ($attr_name) {
-                case $attr_name->value === "process_name" 
-                     && mb_strpos((string) $attr_value, ".") === false :
+                case $attr_name->value === "process_name"
+                     && mb_strpos((string) $attr_value, ".") === false:
                     if (in_array($attr_value, explode(".", $process->process_name))) {
                         $this->whereable[] = $process;
                     }
                     break;
 
-                case $attr_name->value === "consumed_memory" && ! is_null($optional) :
+                case $attr_name->value === "consumed_memory" && ! is_null($optional):
                     $this->factorizeOptionalParam($attr_name->value, $attr_value, $optional);
                     break;
 
-                case $attr_name->value === "session_name" :
+                case $attr_name->value === "session_name":
                     $session_name = $process->{$attr_name};
-                    $attr_value = (string) $attr_value; 
+                    $attr_value = (string) $attr_value;
 
                     if (mb_strtolower($session_name) === mb_strtolower($attr_value)) {
                         $this->whereable[] = $process;
                     }
                     break;
 
-                default : 
+                default:
                     if ($process->{$attr_name} === $attr_value) {
                         $this->whereable[] = $process;
                     }
@@ -105,45 +105,51 @@ final class Processes
      * @param string $attr_name
      * @param int|string $attr_value
      * @param int|string $optional
-     * 
+     *
      * @return void
      */
     private function factorizeOptionalParam(string $attr_name, $attr_value, $optional): void
     {
         switch ($optional) {
-            case ">" : 
-                $this->whereable = array_filter($this->processes,
+            case ">":
+                $this->whereable = array_filter(
+                    $this->processes,
                     fn (Process $process) => $process->{$attr_name} > $attr_value
                 );
                 break;
-            case ">=" :
-                $this->whereable = array_filter($this->processes, 
+            case ">=":
+                $this->whereable = array_filter(
+                    $this->processes,
                     fn (Process $process) => $process->{$attr_name} >= $attr_value
                 );
                 break;
-            case "<" :
-                $this->whereable = array_filter($this->processes, 
+            case "<":
+                $this->whereable = array_filter(
+                    $this->processes,
                     fn (Process $process) => $process->{$attr_name} < $attr_value
                 );
                 break;
-            case "<=" :
-                $this->whereable = array_filter($this->processes, 
+            case "<=":
+                $this->whereable = array_filter(
+                    $this->processes,
                     fn (Process $process) => $process->{$attr_name} <= $attr_value
                 );
                 break;
-            case "=" :
-                $this->whereable = array_filter($this->processes, 
+            case "=":
+                $this->whereable = array_filter(
+                    $this->processes,
                     fn (Process $process) => $process->{$attr_name} === $attr_value
                 );
                 break;
-            case "!=" :
-                $this->whereable = array_filter($this->processes, 
+            case "!=":
+                $this->whereable = array_filter(
+                    $this->processes,
                     fn (Process $process) => $process->{$attr_name} !== $attr_value
                 );
                 break;
         }
     }
-    
+
     /**
      * @return array<int, \Terminator\Kernel\Process>
      */
@@ -156,7 +162,7 @@ final class Processes
 
     /**
      * @param string $processes
-     * 
+     *
      * @return array<int, \Terminator\Kernel\Process>
      */
     private function parse(string $processes): array
@@ -184,41 +190,46 @@ final class Processes
             }
 
             $process_string_parts = explode(" $session_name ", $process);
-            
+
             $process_name_with_id = $process_string_parts[0];
             $process_session_number_with_consumed_memory = trim($process_string_parts[1]);
 
             $session_number = (int) mb_substr(
-                $process_session_number_with_consumed_memory, 0, 
+                $process_session_number_with_consumed_memory,
+                0,
                 mb_strpos($process_session_number_with_consumed_memory, " ")
             );
 
             $consumed_memory = trim(mb_substr(
-                $process_session_number_with_consumed_memory, 
+                $process_session_number_with_consumed_memory,
                 mb_strlen($session_number)
             ));
-            
+
             $consumed_memory = mb_substr(
-                $consumed_memory, 0, 
+                $consumed_memory,
+                0,
                 mb_strpos($consumed_memory, " ")
             );
 
             $consumed_memory = (int) filter_var($consumed_memory, FILTER_SANITIZE_NUMBER_INT);
 
             $process_id = (int) mb_substr(
-                $process_name_with_id, 
+                $process_name_with_id,
                 mb_strrpos($process_name_with_id, " ") + 1
             );
 
-            $process_name = (string) trim(mb_substr(
-                $process_name_with_id, 0, 
-                mb_strrpos($process_name_with_id, " "))
+            $process_name = (string) trim(
+                mb_substr(
+                $process_name_with_id,
+                0,
+                mb_strrpos($process_name_with_id, " ")
+            )
             );
 
             $pretty_processes[] = new Process(compact(
-                "process_name", 
-                "process_id", 
-                "session_name", 
+                "process_name",
+                "process_id",
+                "session_name",
                 "session_number",
                 "consumed_memory"
             ));
@@ -227,7 +238,7 @@ final class Processes
         return $pretty_processes;
     }
 
-    /* 
+    /*
         getActiveProcesses
         getActiveProcessById
         getActiveProcessesByName
