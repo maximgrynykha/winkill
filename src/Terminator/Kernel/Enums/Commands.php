@@ -1,5 +1,5 @@
 <?php
- 
+
 namespace Terminator\Kernel\Enums;
 
 use Spatie\Enum\Enum;
