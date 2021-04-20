@@ -103,20 +103,22 @@ array_walk($processes_ids = [1000, 5595, 17820],
 ```
 
 ```php
-// Sort processes on consumed memory by DESC
+// Sort processes on consumed memory by ASC
 
-usort(
-    $processes->where(Attributes::consumed_memory(), 3000, ">=")->get(), 
-    fn (Process $process, Process $_process) =>
-        $process->consumed_memory > $_process->consumed_memory;
+$processes = $processes->where(Attributes::consumed_memory(), 1000, "<")
+    ->get();
+
+usort($processes, fn (Process $process, Process $_process) =>
+    $process->consumed_memory > $_process->consumed_memory
 );
 
 // Sort processes on consumed memory by DESC
 
-usort(
-    $processes->where(Attributes::consumed_memory(), 3000, ">=")->get(), 
-    fn (Process $process, Process $_process) =>
-        $process->consumed_memory < $_process->consumed_memory;
+$processes = $processes->where(Attributes::consumed_memory(), 1000, "<")
+    ->get();
+
+usort($processes, fn (Process $process, Process $_process) =>
+    $process->consumed_memory < $_process->consumed_memory
 );
 ```
 
