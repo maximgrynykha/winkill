@@ -190,38 +190,43 @@ final class Processes
             }
 
             $process_string_parts = explode(" $session_name ", $process);
-            
+
             /** @phpstan-ignore-next-line */
             $process_name_with_id = $process_string_parts[0];
-            
+
             /** @phpstan-ignore-next-line */
             $process_session_number_with_consumed_memory = trim($process_string_parts[1]);
 
             $session_number = (int) mb_substr(
-                $process_session_number_with_consumed_memory, 0, 
+                $process_session_number_with_consumed_memory,
+                0,
                 (int) mb_strpos($process_session_number_with_consumed_memory, " ")
             );
 
             $consumed_memory = trim(mb_substr(
-                $process_session_number_with_consumed_memory, 
+                $process_session_number_with_consumed_memory,
                 mb_strlen((string) $session_number)
             ));
 
             $consumed_memory = mb_substr(
-                $consumed_memory, 0, 
+                $consumed_memory,
+                0,
                 (int) mb_strpos($consumed_memory, " ")
             );
 
             $consumed_memory = (int) filter_var($consumed_memory, FILTER_SANITIZE_NUMBER_INT);
 
             $process_id = (int) mb_substr(
-                $process_name_with_id, 
+                $process_name_with_id,
                 (int) mb_strrpos($process_name_with_id, " ") + 1
             );
 
-            $process_name = (string) trim(mb_substr(
-                $process_name_with_id, 0, 
-                (int) mb_strrpos($process_name_with_id, " "))
+            $process_name = (string) trim(
+                mb_substr(
+                $process_name_with_id,
+                0,
+                (int) mb_strrpos($process_name_with_id, " ")
+            )
             );
 
             $pretty_processes[] = new Process(compact(
