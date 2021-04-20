@@ -23,16 +23,16 @@ final class Process
     }
 
     /**
-     * @return string|null
+     * @return void
      */
-    public function terminate(): ?string
+    public function terminate(): void
     {
         $command = self::prepare(
             Commands::TERMINATE_BY_ID(),
             $this->process_id
         );
 
-        return shell_exec($command);
+        shell_exec($command);
     }
 
     /**

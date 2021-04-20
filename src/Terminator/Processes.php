@@ -191,10 +191,7 @@ final class Processes
 
             $process_string_parts = explode(" $session_name ", $process);
 
-            /** @phpstan-ignore-next-line */
             $process_name_with_id = $process_string_parts[0];
-
-            /** @phpstan-ignore-next-line */
             $process_session_number_with_consumed_memory = trim($process_string_parts[1]);
 
             $session_number = (int) mb_substr(
