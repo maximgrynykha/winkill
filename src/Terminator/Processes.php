@@ -240,24 +240,4 @@ final class Processes
 
         return $pretty_processes;
     }
-
-    /*
-        getActiveProcesses
-        getActiveProcessById
-        getActiveProcessesByName
-        getActiveProcessesByExtension
-        getActiveProcessNameById
-        getActiveProcessesIdsByName
-        getActiveProcessesIdsByExtension
-        getActiveProcessesNamesByExtension
-        getActiveProcessByConsumedMemory
-    */
-
-    // terminate one task by process id
-    //* terminate one task by process name
-
-    // terminate all task by process ids
-    // terminate all task by process name
-
-    // terminate all task by process extention
 }
