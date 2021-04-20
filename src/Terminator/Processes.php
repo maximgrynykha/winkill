@@ -220,10 +220,10 @@ final class Processes
 
             $process_name = (string) trim(
                 mb_substr(
-                $process_name_with_id,
-                0,
-                (int) mb_strrpos($process_name_with_id, " ")
-            )
+                    $process_name_with_id,
+                    0,
+                    (int) mb_strrpos($process_name_with_id, " ")
+                )
             );
 
             $pretty_processes[] = new Process(compact(
