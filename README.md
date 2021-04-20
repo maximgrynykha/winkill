@@ -77,7 +77,7 @@ $processes->where(Attributes::consumed_memory(), 128920)
     ->terminate(); 
 ```
 
-## 🧱 Useful snippets
+### 🧱 Useful snippets
 
 ```php
 /* 
