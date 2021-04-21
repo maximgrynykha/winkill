@@ -19,6 +19,7 @@ composer require ismaxim/terminator
 $processes = new Processes;
 
 // Get all active processes
+
 print_r($processes->get());
 
 /* 
@@ -53,6 +54,7 @@ $processes->where(Attributes::session_number(), 1)
     ->get();
 
 // Note consumed memory is estimates in Kb(kilobytes)
+
 $processes->where(Attributes::consumed_memory(), 128920)
     ->get(); 
 ```
@@ -73,11 +75,12 @@ $processes->where(Attributes::session_number(), 1)
     ->terminate();
 
 // Note consumed memory is estimates in Kb(kilobytes)
+
 $processes->where(Attributes::consumed_memory(), 128920)
     ->terminate(); 
 ```
 
-### 🧱 Useful snippets
+### 🧱 Snippets
 
 ```php
 /* 
@@ -103,19 +106,16 @@ array_walk($processes_ids = [1000, 5595, 17820],
 ```
 
 ```php
-// Sort processes on consumed memory by ASC
-
 $processes = $processes->where(Attributes::consumed_memory(), 1000, "<")
     ->get();
+
+// Sort processes on consumed memory by ASC
 
 usort($processes, fn (Process $process, Process $_process) =>
     $process->consumed_memory > $_process->consumed_memory
 );
 
 // Sort processes on consumed memory by DESC
-
-$processes = $processes->where(Attributes::consumed_memory(), 1000, "<")
-    ->get();
 
 usort($processes, fn (Process $process, Process $_process) =>
     $process->consumed_memory < $_process->consumed_memory
