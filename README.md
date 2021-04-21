@@ -53,7 +53,7 @@ $processes->where(Attributes::session_name(), "console")
 $processes->where(Attributes::session_number(), 1)
     ->get();
 
-// Note consumed memory is estimates in Kb(kilobytes)
+// ⚠️ Note: consumed memory is estimated in Kb(kilobytes)
 
 $processes->where(Attributes::consumed_memory(), 128920)
     ->get(); 
@@ -74,7 +74,7 @@ $processes->where(Attributes::session_name(), "console")
 $processes->where(Attributes::session_number(), 1)
     ->terminate();
 
-// Note consumed memory is estimates in Kb(kilobytes)
+// ⚠️ Note: consumed memory is estimated in Kb(kilobytes)
 
 $processes->where(Attributes::consumed_memory(), 128920)
     ->terminate(); 
