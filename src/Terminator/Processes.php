@@ -35,7 +35,17 @@ final class Processes
     /**
      * @return array<int, \Terminator\Kernel\Process>
      */
-    public function update(): array
+    public function scan(): array
+    {
+        $processes = trim((string) shell_exec('tasklist'));
+
+        return $this->parse($processes);
+    }
+
+    /**
+     * @return array<int, \Terminator\Kernel\Process>
+     */
+    public function rescan(): array
     {
         $this->processes = $this->scan();
 
@@ -154,16 +164,6 @@ final class Processes
     }
 
     /**
-     * @return array<int, \Terminator\Kernel\Process>
-     */
-    private function scan(): array
-    {
-        $processes = trim((string) shell_exec('tasklist'));
-
-        return $this->parse($processes);
-    }
-
-    /**
      * @param string $processes
      *
      * @return array<int, \Terminator\Kernel\Process>
@@ -180,62 +180,7 @@ final class Processes
         $pretty_processes = [];
 
         foreach ($processes as $process) {
-            $process_name = (string) null;
-            $process_id = (int) null;
-            $session_name = (string) null;
-            $session_number = (int) null;
-            $consumed_memory = (int) null;
-
-            if (mb_strpos($process, "Services") !== false) {
-                $session_name = "Services";
-            } elseif (mb_strpos($process, "Console") !== false) {
-                $session_name = "Console";
-            }
-
-            $process_string_parts = explode(" $session_name ", $process);
-
-            $process_name_with_id = $process_string_parts[0];
-            $process_session_number_with_consumed_memory = trim($process_string_parts[1]);
-
-            $session_number = (int) mb_substr(
-                $process_session_number_with_consumed_memory,
-                0,
-                (int) mb_strpos($process_session_number_with_consumed_memory, " ")
-            );
-
-            $consumed_memory = trim(mb_substr(
-                $process_session_number_with_consumed_memory,
-                mb_strlen((string) $session_number)
-            ));
-
-            $consumed_memory = mb_substr(
-                $consumed_memory,
-                0,
-                (int) mb_strpos($consumed_memory, " ")
-            );
-
-            $consumed_memory = (int) filter_var($consumed_memory, FILTER_SANITIZE_NUMBER_INT);
-
-            $process_id = (int) mb_substr(
-                $process_name_with_id,
-                (int) mb_strrpos($process_name_with_id, " ") + 1
-            );
-
-            $process_name = (string) trim(
-                mb_substr(
-                    $process_name_with_id,
-                    0,
-                    (int) mb_strrpos($process_name_with_id, " ")
-                )
-            );
-
-            $pretty_processes[] = new Process(compact(
-                "process_name",
-                "process_id",
-                "session_name",
-                "session_number",
-                "consumed_memory"
-            ));
+            $pretty_processes[] = (new Process())->parse($process);
         }
 
         return $pretty_processes;
