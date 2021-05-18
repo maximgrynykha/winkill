@@ -50,25 +50,25 @@ change-title-escapes: '\<*_&'
 version-resolver:
   major:
     labels:
-      - major
-      - breaking
-      - refactoring
+      - 'major'
+      - 'breaking'
+      - 'refactoring'
   minor:
     labels:
-      - feature
-      - enhancement
-      - minor
-      - common
+      - 'feature'
+      - 'enhancement'
+      - 'minor'
+      - 'common'
   patch:
     labels:
-      - patch
-      - build
-      - bug
-      - bugfix
-      - hotfix
-      - fix
-      - docs
-      - tests
+      - 'patch'
+      - 'build'
+      - 'bug'
+      - 'bugfix'
+      - 'hotfix'
+      - 'fix'
+      - 'docs'
+      - 'tests'
   default: patch
 
 change-template: '- #$NUMBER: $TITLE'
