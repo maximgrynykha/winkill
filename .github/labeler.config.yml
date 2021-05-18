@@ -1,4 +1,4 @@
-type:build:
+build:
   - ".github/**/*"
   - ".coveralls.yml"
   - ".styleci.yml"
@@ -10,15 +10,15 @@ dependencies:
   - "composer.json"
   - "composer.lock"
 
-type:common:
+common:
   - "src/**/*"
 
-type:tests:
+tests:
   - "tests/**/*"
   - "phpunit.xml.dist"
   - "phpstan.neon.dist"
 
-theme:docs:
+docs:
   - "README.md"
   - "LICENSE.md"
   - "CONTRIBUTING.md"
