@@ -35,7 +35,17 @@ final class Processes
     /**
      * @return array<int, \Terminator\Kernel\Process>
      */
-    public function update(): array
+    public function scan(): array
+    {
+        $processes = trim((string) shell_exec('tasklist'));
+
+        return $this->parse($processes);
+    }
+
+    /**
+     * @return array<int, \Terminator\Kernel\Process>
+     */
+    public function rescan(): array
     {
         $this->processes = $this->scan();
 
@@ -151,16 +161,6 @@ final class Processes
                 );
                 break;
         }
-    }
-
-    /**
-     * @return array<int, \Terminator\Kernel\Process>
-     */
-    private function scan(): array
-    {
-        $processes = trim((string) shell_exec('tasklist'));
-
-        return $this->parse($processes);
     }
 
     /**
