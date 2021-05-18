@@ -25,6 +25,10 @@ categories:
       - 'chore'
       - 'build'
   
+  - title: '💥 Breaking Changes'
+    labels:
+      - 'breaking'
+
   - title: '♻️ Refactoring'
     labels:
       - 'refactoring'
@@ -47,6 +51,7 @@ version-resolver:
   major:
     labels:
       - major
+      - breaking
       - refactoring
   minor:
     labels:
