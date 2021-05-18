@@ -180,7 +180,7 @@ final class Processes
         $pretty_processes = [];
 
         foreach ($processes as $process) {
-            $pretty_processes[] = (new Process)->parse($process);
+            $pretty_processes[] = (new Process())->parse($process);
         }
 
         return $pretty_processes;

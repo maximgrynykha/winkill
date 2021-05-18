@@ -27,7 +27,7 @@ final class Process
 
     /**
      * @param string $process
-     * 
+     *
      * @return self
      */
     public function parse(string $process): self
