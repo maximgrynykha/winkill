@@ -10,13 +10,13 @@ dependencies:
   - "composer.json"
   - "composer.lock"
 
-type:common
+type:common:
   - "src/**/*"
 
 type:tests:
-  - 'tests/**/*'
-  - 'phpstan.neon.dist'
-  - 'phpunit.xml.dist'
+  - "tests/**/*"
+  - "phpunit.xml.dist"
+  - "phpstan.neon.dist"
 
 theme:docs:
   - "README.md"
