@@ -12,7 +12,7 @@ categories:
       labels:
         - 'feature'
         - 'enhancement'
-        - 'type:common'
+        - 'common'
 
   - title: '🐞 Bug Fixes'
       labels:
@@ -28,7 +28,7 @@ categories:
   - title: '🏗️ Maintenance'
       labels:
         - 'chore'
-        - 'type:build'
+        - 'build'
   
   - title: '♻️ Refactoring'
       labels:
@@ -36,11 +36,11 @@ categories:
   
   - title: '🧪 Tests'
       labels:
-        - 'type:tests'
+        - 'tests'
   
   - title: '📖 Docs'
       labels:
-        - 'theme:docs'
+        - 'docs'
 
 change-title-escapes: '\<*_&'
 
@@ -54,15 +54,15 @@ version-resolver:
       - feature
       - enhancement
       - minor
-      - type:common
+      - common
   patch:
     labels:
       - patch
-      - type:build
+      - build
       - bug
       - bugfix
       - hotfix
       - fix
-      - theme:docs
-      - type:tests
+      - docs
+      - tests
   default: patch
