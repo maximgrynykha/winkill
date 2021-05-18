@@ -1,0 +1,24 @@
+type:build:
+  - ".github/**/*"
+  - ".coveralls.yml"
+  - ".styleci.yml"
+  - ".gitignore"
+  - ".gitattributes"
+  - ".editorconfig"
+
+dependencies:
+  - "composer.json"
+  - "composer.lock"
+
+type:common
+  - "src/**/*"
+
+type:tests:
+  - 'tests/**/*'
+  - 'phpstan.neon.dist'
+  - 'phpunit.xml.dist'
+
+theme:docs:
+  - "README.md"
+  - "LICENSE.md"
+  - "CONTRIBUTING.md"
