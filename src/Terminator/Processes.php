@@ -174,15 +174,11 @@ final class Processes
 
         $stringy = Stringy::create($processes);
 
-        $processes = trim(mb_substr($processes, (int) $stringy->indexOfLast('=')), "=");
-        $processes = array_slice(explode("\n", $processes), 1);
+        $processes = mb_substr($processes, (int) $stringy->indexOfLast('='));
+        $processes = array_slice(explode("\n", trim($processes, "=")), 1);
 
-        $pretty_processes = [];
-
-        foreach ($processes as $process) {
-            $pretty_processes[] = (new Process())->parse($process);
-        }
-
-        return $pretty_processes;
+        return array_map(function ($process_string) {
+                return new Process($process_string);
+            }, $processes);
     }
 }
