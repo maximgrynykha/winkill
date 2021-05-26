@@ -1,9 +1,5 @@
 <?php
 
-/*
- * style: apply fixes from style-ci
- */
-
 namespace Terminator;
 
 use Stringy\Stringy;
