@@ -1,5 +1,9 @@
 <?php
 
+/*
+ * style: apply fixes from style-ci
+ */
+
 namespace Terminator\Kernel;
 
 use Terminator\Kernel\Enums\Commands;
@@ -66,7 +70,7 @@ final class Process
         );
 
         $this->consumed_memory = (int) filter_var(
-            $consumed_memory, 
+            $consumed_memory,
             FILTER_SANITIZE_NUMBER_INT
         );
 

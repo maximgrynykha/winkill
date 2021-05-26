@@ -1,5 +1,9 @@
 <?php
 
+/*
+ * style: apply fixes from style-ci
+ */
+
 namespace Terminator;
 
 use Stringy\Stringy;
@@ -178,7 +182,7 @@ final class Processes
         $processes = array_slice(explode("\n", trim($processes, "=")), 1);
 
         return array_map(function ($process_string) {
-                return new Process($process_string);
-            }, $processes);
+            return new Process($process_string);
+        }, $processes);
     }
 }
