@@ -1,5 +1,9 @@
 <?php
 
+/*
+ * style: apply fixes from style-ci
+ */
+
 namespace Terminator\Kernel\Enums;
 
 use Spatie\Enum\Enum;

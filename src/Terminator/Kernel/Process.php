@@ -1,5 +1,9 @@
 <?php
 
+/*
+ * style: apply fixes from style-ci
+ */
+
 namespace Terminator\Kernel;
 
 use Terminator\Kernel\Enums\Commands;
@@ -12,12 +16,17 @@ final class Process
     public int $session_number;
     public int $consumed_memory;
 
+    public function __construct(string $process)
+    {
+        $this->parse($process);
+    }
+
     /**
      * @return void
      */
     public function terminate(): void
     {
-        $command = self::prepare(
+        $command = $this->prepare(
             Commands::TERMINATE_BY_ID(),
             $this->process_id
         );
@@ -30,7 +39,7 @@ final class Process
      *
      * @return self
      */
-    public function parse(string $process): self
+    private function parse(string $process): self
     {
         if (mb_strpos($process, "Services") !== false) {
             $this->session_name = "Services";
@@ -60,7 +69,10 @@ final class Process
             (int) mb_strpos($consumed_memory, " ")
         );
 
-        $this->consumed_memory = (int) filter_var($consumed_memory, FILTER_SANITIZE_NUMBER_INT);
+        $this->consumed_memory = (int) filter_var(
+            $consumed_memory,
+            FILTER_SANITIZE_NUMBER_INT
+        );
 
         $this->process_id = (int) mb_substr(
             $process_name_with_id,
@@ -84,7 +96,7 @@ final class Process
      *
      * @return string
      */
-    private static function prepare(Commands $command, $attribute): string
+    private function prepare(Commands $command, $attribute): string
     {
         $command = str_replace("<attribute>", trim((string) $attribute), $command);
 
