@@ -45,6 +45,10 @@ categories:
     labels:
       - 'todo'
 
+  - title: '🎨 Style'
+    labels: 
+      - 'style'
+
 change-title-escapes: '\<*_&'
 
 version-resolver:
@@ -61,6 +65,7 @@ version-resolver:
       - 'common'
   patch:
     labels:
+      - 'style'
       - 'patch'
       - 'build'
       - 'bug'
