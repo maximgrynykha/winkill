@@ -1,6 +1,6 @@
 # The MIT License (MIT)
 
-Copyright (c) Maxim Grynykha <gr.gromax@gmail.com>
+Copyright (c) Maxim Grynykha <maximgrynykha@gmail.com>
 
 ````plaintext
 Permission is hereby granted, free of charge, to any person obtaining a copy of

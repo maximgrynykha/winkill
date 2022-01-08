@@ -1,145 +1,165 @@
-![Build Status](https://img.shields.io/github/workflow/status/ismaxim/terminator/Build?label=build&logo=github&logoColor=white&style=for-the-badge)
+![Build Status](https://img.shields.io/github/workflow/status/MaximGrynykha/winkill/Build?label=build&logo=github&logoColor=white&style=for-the-badge)
 
-# __Terminator__
+# __Winkill__
+
+Allows work with processes as object instances for each concrete process & select specific ones by some attributes and kill them if needed.
 
 ## ⚙️ Installation
 
 To install this library - run the command below in your terminal:
 
 ```shell
-composer require ismaxim/terminator
+composer require maximgrynykha/winkill
 ```
 
-## 🧙 Usage  
-
-### 🚀 Start
+## Usage  
 
 ```php
+<?php
 
-$processes = new Processes;
+use Winkill\Winkill;
 
-// Get all active processes
+require_once 'vendor/autoload.php';
 
-print_r($processes->get());
-
-/* 
-    OUTPUT FORMAT: 
-
-    [0] => Terminator\Kernel\Process Object
-        (
-            [process_name] => System Idle Process
-            [process_id] => 0
-            [session_name] => Services
-            [session_number] => 0
-            [consumed_memory] => 8
-        )
-
-    ... (list continues)
-*/
+try {
+    $winkill = new Winkill();
+    $processes = $winkill->scan();
 ```
 
-### 📮 Retrieve processes
+```php
+    // Get scanned processes
+    $scanned = $processes->get();
+ 
+    dd($scanned);
+```
 
 ```php
-$processes->where(Attributes::process_name(), "chrome")
-    ->get();
+    // Select specific process(es)
+    $selected = $processes->where(
+        attribute: 'process_name',
+        compareAs: '=',
+        value: 'phpstorm64.exe'
+    )->get(); // Note if where-condition didn't found the
+              // process(es) then returns all scanned process(es).
 
-$processes->where(Attributes::process_id(), 11455)
-    ->get();
+    dd($selected);
+```
 
-$processes->where(Attributes::session_name(), "console")
-    ->get();
+```php
+    // Kill specific process(es)
+    $killed = $processes->where(
+        attribute: 'process_id',
+        compareAs: '=',
+        value: 11492
+    )->kill(); // Note if process(es) have been already killed
+               // or not found by the where-condition then returns an empty array.
+    
+    dd($killed);
+```
 
-$processes->where(Attributes::session_number(), 1)
-    ->get();
+```php
+} catch (\Winkill\Kernel\Interface\Exception|\Throwable $throwable) {
+    die($throwable->getMessage());
+}
+```
+
+### API
+| Attribute names   | Attribute Values                | Examples               | Compare Operators |
+|:------------------|:--------------------------------|:-----------------------|:------------------|
+| `process_name`    | [string]: simple name           | chrome / figma         | [string]: `>`     |
+|                   | [string]: name with .ext        | chrome.exe / figma.exe | [string]: `<`     |
+|                   | [string]: uppercase name        | Chrome.exe / Figma.exe | [string]: `=`     |
+ | `process_id`      | [int]: number of the id         |                        | [string]: `>=`    |
+| `session_name`    | [string]: Console / Services    |                        | [string]: `<=`    |
+| `session_number`  | [int]: number in range of {0-1} |                        | [string]: `!=`    |
+| `consumed_memory` | [int]: amount in Kb(kilobytes)  |                        |                   |
+
+### Select processes
+
+```php
+$processes->where('process_name', '=', 'chrome')->get();
+
+$processes->where('process_id', '=', 11455)->get();
+
+$processes->where('session_name', '=', 'console')->get();
+
+$processes->where('session_number', '=', 1)->get();
 
 // ⚠️ Note: consumed memory is estimated in Kb(kilobytes)
-
-$processes->where(Attributes::consumed_memory(), 128920)
-    ->get(); 
+$processes->where('consumed_memory', '=', 128920)->get(); 
 ```
 
-### 🧨 Terminate processes
+### Terminate processes
 
 ```php
-$processes->where(Attributes::process_name(), "chrome")
-    ->terminate();
+$processes->where('process_name', '=', 'chrome')->kill();
 
-$processes->where(Attributes::process_id(), 11455)
-    ->terminate();
+$processes->where('process_id', '=', 11455)->kill();
 
-$processes->where(Attributes::session_name(), "console")
-    ->terminate();
+//❗Alert: killing processes by attribute [session_name]
+// may break you 🤯 and/or your computer 💥.
+// Use it only if you are 100% confident at the ending result.
+$processes->where('session_name', '=', 'console')->kill();
 
-$processes->where(Attributes::session_number(), 1)
-    ->terminate();
+$processes->where('session_number', '=', 1)->kill();
 
 // ⚠️ Note: consumed memory is estimated in Kb(kilobytes)
-
-$processes->where(Attributes::consumed_memory(), 128920)
-    ->terminate(); 
+$processes->where('consumed_memory', '=', 128920)->kill(); 
 ```
 
 ### 🧱 Snippets
 
 ```php
-/* 
-    For processing processes by an array of names or ids 
-    use native PHP functions array_map() either array_walk():
-*/
+// You can switch between array_walk and array_map for your needs.
+// [Confusing in difference?](https://stackoverflow.com/a/3432266/11591375)
 
-// Terminate processes by an array of process names *(all names is example)
-
-array_walk($processes_names = ["chrome", "firefox", "slack"], 
-    fn(string $process_name) => $processes
-        ->where(Attributes::process_name(), $process_name)
-        ->terminate()
+// Terminate processes by an array of process names (all names are an example)
+array_walk($processes_names = ['chrome', 'firefox', 'slack'],
+    static fn(string $process_name): Process => 
+        $processes->where('process_name', '=', $process_name)->kill(),
 );
 
-// Terminate processes by an array of process ids *(all ids is example)
-
-array_walk($processes_ids = [1000, 5595, 17820], 
-    fn(int $process_id) => $processes
-        ->where(Attributes::process_id(), $process_id)
-        ->terminate()
+// Terminate processes by an array of process ids (all ids are an example)
+array_walk($processes_ids = [1000, 5595, 17820],
+    static fn(string $process_id): Process => 
+        $processes->where('process_id', '=', $process_id)->kill(),
 );
 ```
 
 ```php
-$processes = $processes->where(Attributes::consumed_memory(), 1000, "<")
-    ->get();
+$processes = $processes->where('consumed_memory', '<', 1000)->get();
 
 // Sort processes on consumed memory by ASC
-
-usort($processes, fn (Process $process, Process $_process) =>
-    $process->consumed_memory > $_process->consumed_memory
+usort($processes, static fn(Process $process, Process $_process): int =>
+    $process->consumed_memory <=> $_process->consumed_memory
 );
 
 // Sort processes on consumed memory by DESC
-
-usort($processes, fn (Process $process, Process $_process) =>
-    $process->consumed_memory < $_process->consumed_memory
+usort($processes, static fn(Process $process, Process $_process): int =>
+    $_process->consumed_memory <=> $process->consumed_memory
 );
 ```
 
-## 🧪 Testing
+## 📝 Footnotes
 
-_Actually, all tests already automatically passed within CI build._
+_The project follows `SOLID` principles as much as possible, also paying attention to `DRY`. Here is a list of the
+`Design Patterns` used in the project_:
 
-To test this library - run the command below in your terminal.
+| Creational                                                                      | Behavioral                                                      | Others*                                                                 |
+|:--------------------------------------------------------------------------------|:----------------------------------------------------------------|:------------------------------------------------------------------------|
+| [`Factory Method`](https://refactoring.guru/design-patterns/factory-method)     | [`Strategy`](https://refactoring.guru/design-patterns/strategy) | [`Composition Root`](https://blog.ploeh.dk/2011/07/28/CompositionRoot/) |
+| [`Abstract Factory`](https://refactoring.guru/design-patterns/abstract-factory) | [`Command`](https://refactoring.guru/design-patterns/command)   |                                                                         |
+| [`Builder`](https://refactoring.guru/design-patterns/builder)                   |                                                                 |                                                                         |
 
-```shell
-composer test
-```
 
 ## 🤝 Contributing
 
-If you have a problem that cannot be solved using this library, please write your solution and if you want to help other developers who also use this library (or if you want to keep your solution working after a new version is released, which will go to package manager dependencies) - create a pull-request. We will be happy to add your excellent code to the library!
+If you have a problem that cannot be solved using this library, please write your solution, and if you want to help 
+other developers who also use this library (or if you want to keep your solution working after a new version is 
+released, which will be in the package manager dependencies) — create a pull-request. I will be happy to add your 
+excellent code to the library!
 
-🐞 Report any bugs or issues you find on the [GitHub issues](https://github.com/ismaxim/urling/issues).
-
-## 📎 Credits
-- [Maintainer](https://github.com/ismaxim)
+🐞 Report any bugs or issues you find on the [GitHub issues](https://github.com/MaximGrynykha/winkill/issues).
 
 ## 📃 License
 

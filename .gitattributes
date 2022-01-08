@@ -1,5 +1,5 @@
 # Configure which ending of files will be used for the repo
-# on a diffent machines, when anyone will create or modify the files 
+# on a different machines, when anyone will create or modify the files
 * text=auto
 
 *.php text
@@ -15,7 +15,7 @@ composer.lock -diff
 
 # Dirs
 tests             export-ignore
-assets            export-ignore  
+assets            export-ignore
 .github           export-ignore
 
 # Dotfiles

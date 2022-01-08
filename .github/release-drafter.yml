@@ -15,16 +15,16 @@ categories:
       - 'bugfix'
       - 'bug'
       - 'hotfix'
-  
+
   - title: '📦 Dependencies'
-    labels:       
+    labels:
       - 'dependencies'
-  
+
   - title: '🏗️ Maintenance'
     labels:
       - 'chore'
       - 'build'
-  
+
   - title: '💥 Breaking Changes'
     labels:
       - 'breaking'
@@ -32,11 +32,11 @@ categories:
   - title: '♻️ Refactoring'
     labels:
       - 'refactoring'
-  
+
   - title: '🧪 Tests'
     labels:
       - 'tests'
-  
+
   - title: '📖 Docs'
     labels:
       - 'docs'
@@ -45,6 +45,10 @@ categories:
     labels:
       - 'todo'
 
+  - title: '🎨 Style'
+    labels: 
+      - 'style'
+
 change-title-escapes: '\<*_&'
 
 version-resolver:
@@ -52,7 +56,6 @@ version-resolver:
     labels:
       - 'major'
       - 'breaking'
-      - 'refactoring'
   minor:
     labels:
       - 'feature'
@@ -61,6 +64,7 @@ version-resolver:
       - 'common'
   patch:
     labels:
+      - 'style'
       - 'patch'
       - 'build'
       - 'bug'
@@ -69,10 +73,11 @@ version-resolver:
       - 'fix'
       - 'docs'
       - 'tests'
+      - 'refactoring'
   default: patch
 
 change-template: '- #$NUMBER: $TITLE'
 template: |
   ## Changes
-  
+
   $CHANGES

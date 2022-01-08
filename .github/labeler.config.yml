@@ -13,11 +13,6 @@ dependencies:
 common:
   - "src/**/*"
 
-tests:
-  - "tests/**/*"
-  - "phpunit.xml.dist"
-  - "phpstan.neon.dist"
-
 docs:
   - "README.md"
   - "LICENSE.md"
