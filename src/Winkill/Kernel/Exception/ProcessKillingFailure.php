@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Winkill\Kernel\Exception;
 
@@ -15,11 +17,10 @@ final class ProcessKillingFailure extends \LogicException implements Exception
      */
     public function __construct(
         private Process $process,
-        string          $message = "",
-        int             $code = 0,
+        string $message = "",
+        int $code = 0,
         ?\Throwable $previous = null
-    )
-    {
+    ) {
         if (!$message) {
             $message = 'The process cannot be killed.' . PHP_EOL . $this->process;
         }

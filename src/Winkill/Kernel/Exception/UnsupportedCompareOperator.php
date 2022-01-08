@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Winkill\Kernel\Exception;
 
@@ -13,11 +15,10 @@ final class UnsupportedCompareOperator extends \InvalidArgumentException impleme
      * @param \Throwable|null $previous
      */
     public function __construct(
-        string      $message = "",
-        int         $code = 0,
+        string $message = "",
+        int $code = 0,
         ?\Throwable $previous = null
-    )
-    {
+    ) {
         if (!$message) {
             $message = 'You try to use an unsupported compare operator. Use one
                         of these instead: ' . implode(', ', Comparison::values());

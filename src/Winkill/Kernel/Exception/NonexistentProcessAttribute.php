@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Winkill\Kernel\Exception;
 
@@ -14,11 +16,10 @@ final class NonexistentProcessAttribute extends \InvalidArgumentException implem
      */
     public function __construct(
         private string $attribute,
-        string         $message = "",
-        int            $code = 0,
-        ?\Throwable     $previous = null
-    )
-    {
+        string $message = "",
+        int $code = 0,
+        ?\Throwable $previous = null
+    ) {
         if (!$message) {
             $message =
                 "The attribute: [$this->attribute] doesn't exist

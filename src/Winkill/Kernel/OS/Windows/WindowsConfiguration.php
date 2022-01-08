@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Winkill\Kernel\OS\Windows;
 
@@ -6,11 +8,9 @@ use Winkill\Kernel\Interface\Configuration;
 use Winkill\Kernel\Interface\ProcessKilling;
 use Winkill\Kernel\Interface\ProcessParsing;
 use Winkill\Kernel\Interface\SystemScanning;
-use Winkill\Kernel\OS\Windows\Execution\{
-    Killing\WindowsProcessKillingById,
-    WindowsProcessParsing,
-    WindowsSystemScanning
-};
+use Winkill\Kernel\OS\Windows\Execution\Killing\WindowsProcessKillingById;
+use Winkill\Kernel\OS\Windows\Execution\WindowsProcessParsing;
+use Winkill\Kernel\OS\Windows\Execution\WindowsSystemScanning;
 
 final class WindowsConfiguration implements Configuration
 {

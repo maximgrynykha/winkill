@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Winkill\Kernel\OS\Windows\Execution;
 
@@ -26,11 +28,14 @@ final class WindowsProcessParsing implements ProcessParsing
      */
     public function parse(string $process): Process
     {
-        preg_match(pattern: '/' .
+        preg_match(
+            pattern: '/' .
             '^(?<process_name>.+?\S+)\s+?(?<process_id>\d+)\s+'
             . '(?<session_name>.+?\S+)\s+(?<session_number>\d)\s+'
             . '(?<consumed_memory>.+)'
-            . '/iu', subject: trim($process), matches: $attributes
+            . '/iu',
+            subject: trim($process),
+            matches: $attributes
         ) ?: throw new ProcessParsingFailure($process);
 
         /** @var array<int|string, string> $attributes */
