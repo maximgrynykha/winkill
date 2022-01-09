@@ -63,7 +63,7 @@ try {
 ```
 
 ### API
-| Attribute names   | Attribute Values                | Examples               | Compare Operators |
+| Attribute name    | Attribute Value                 | Example                | Compare Operator |
 |:------------------|:--------------------------------|:-----------------------|:------------------|
 | `process_name`    | [string]: simple name           | chrome / figma         | [string]: `>`     |
 |                   | [string]: name with .ext        | chrome.exe / figma.exe | [string]: `<`     |
