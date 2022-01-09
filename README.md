@@ -39,8 +39,7 @@ try {
         attribute: 'process_name',
         compareAs: '=',
         value: 'phpstorm64.exe'
-    )->get(); // Note if where-condition didn't found the
-              // process(es) then returns all scanned process(es).
+    )->get();
 
     dd($selected);
 ```
@@ -69,7 +68,7 @@ try {
 | `process_name`    | [string]: simple name           | chrome / figma         | [string]: `>`     |
 |                   | [string]: name with .ext        | chrome.exe / figma.exe | [string]: `<`     |
 |                   | [string]: uppercase name        | Chrome.exe / Figma.exe | [string]: `=`     |
- | `process_id`      | [int]: number of the id         |                        | [string]: `>=`    |
+| `process_id`      | [int]: number of the id         |                        | [string]: `>=`    |
 | `session_name`    | [string]: Console / Services    |                        | [string]: `<=`    |
 | `session_number`  | [int]: number in range of {0-1} |                        | [string]: `!=`    |
 | `consumed_memory` | [int]: amount in Kb(kilobytes)  |                        |                   |
