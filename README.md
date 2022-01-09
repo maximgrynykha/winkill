@@ -62,7 +62,7 @@ try {
 }
 ```
 
-### API
+### API (based on 'tasklist' command)
 | Attribute name    | Attribute Value                 | Example                | Compare Operator |
 |:------------------|:--------------------------------|:-----------------------|:------------------|
 | `process_name`    | [string]: simple name           | chrome / figma         | [string]: `>`     |
