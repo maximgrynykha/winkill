@@ -50,8 +50,8 @@ try {
         attribute: 'process_id',
         compareAs: '=',
         value: 11492
-    )->kill(); // Note if process(es) have been already killed
-               // or not found by the where-condition then returns an empty array.
+    )->kill();  // Note if the process(es) has been already killed 
+                // or not found by the where-condition then returns an empty array.
     
     dd($killed);
 ```
@@ -96,8 +96,8 @@ $processes->where('process_name', '=', 'chrome')->kill();
 $processes->where('process_id', '=', 11455)->kill();
 
 //❗Alert: killing processes by attribute [session_name]
-// may break you 🤯 and/or your computer 💥.
-// Use it only if you are 100% confident at the ending result.
+// may break you 🤯 and/or your computer 💥. Use it only 
+// if you are 100% confident at the ending result.
 $processes->where('session_name', '=', 'console')->kill();
 
 $processes->where('session_number', '=', 1)->kill();
@@ -109,9 +109,6 @@ $processes->where('consumed_memory', '=', 128920)->kill();
 ### 🧱 Snippets
 
 ```php
-// You can switch between array_walk and array_map for your needs.
-// [Confusing in difference?](https://stackoverflow.com/a/3432266/11591375)
-
 // Terminate processes by an array of process names (all names are an example)
 array_walk($processes_names = ['chrome', 'firefox', 'slack'],
     static fn(string $process_name): Process => 
@@ -123,6 +120,9 @@ array_walk($processes_ids = [1000, 5595, 17820],
     static fn(string $process_id): Process => 
         $processes->where('process_id', '=', $process_id)->kill(),
 );
+
+// You can switch between array_walk and array_map for your needs.
+// [Confusing in difference?](https://stackoverflow.com/a/3432266/11591375)
 ```
 
 ```php
