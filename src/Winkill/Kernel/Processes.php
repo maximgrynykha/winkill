@@ -28,7 +28,7 @@ final class Processes
     /**
      * Objects Collection
      *
-     * @var Process[]|array<int, Process>
+     * @var array<string, bool|array<int, Process>>
      */
     private array $selected;
 
@@ -42,7 +42,9 @@ final class Processes
     )
     {
         $this->scanned = $this->scan();
-        $this->selected = [];
+
+        $this->selected['is'] = false;
+        $this->selected['processes'] = [];
     }
 
     /**
@@ -69,11 +71,11 @@ final class Processes
      */
     public function get(): array
     {
-        if (! ($this->selected['is'] = ! $this->selected['is'])) {
-            return $this->selected['processes'] ?: [];
-        } else {
-            return $this->scanned;
-        }
+        $this->selected['is'] = ! $this->selected['is'];
+
+        return (! $this->selected['is'])
+            ? $this->selected['processes']
+            : $this->scanned;
     }
 
     /**
