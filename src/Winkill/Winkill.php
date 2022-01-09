@@ -17,8 +17,7 @@ final class Winkill
      */
     public function __construct(
         private ?Configuration $factory = null,
-    ) {
-    }
+    ) {}
 
     /**
      * Composition Root
