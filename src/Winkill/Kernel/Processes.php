@@ -69,7 +69,11 @@ final class Processes
      */
     public function get(): array
     {
-        return $this->selected ?: $this->scanned;
+        if (! ($this->selected['is'] = ! $this->selected['is'])) {
+            return $this->selected['processes'] ?: [];
+        } else {
+            return $this->scanned;
+        }
     }
 
     /**
@@ -113,13 +117,18 @@ final class Processes
             throw new UnsupportedCompareOperator();
         }
 
+        $this->selected['processes'] = []; // Remove all previous selected processes
+        $this->selected['is'] = false; // Begin processes selection
+
         foreach ($this->scanned as $process) {
             $is_handled = $process->handleAttribute(
                 $attribute, $compareAs, $value
             );
 
-            if ($is_handled) $this->selected[] = $process;
+            if ($is_handled) $this->selected['processes'][] = $process;
         }
+
+        $this->selected['is'] = true; // Finish processes selection
 
         return $this;
     }
@@ -172,7 +181,7 @@ final class Processes
 
         $strategy = $strategy ?: $this->factory->createTerminationStrategy();
 
-        foreach ($this->selected as $process) {
+        foreach ($this->selected['processes'] as $process) {
             $strategy->kill($process);
             $killed[] = $process;
         }
