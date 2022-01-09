@@ -49,7 +49,11 @@ final class Processes
 
     /**
      * Return array of selected or scanned processes
-     *
+     * 
+     * (Note: this method is non-idempotent - in one 
+     * case, it returns one thing, in the other case, 
+     * something else.)
+     * 
      * Usage:
      *
      * ```
