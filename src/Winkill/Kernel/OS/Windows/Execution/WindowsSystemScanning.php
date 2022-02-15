@@ -17,9 +17,8 @@ final class WindowsSystemScanning implements SystemScanning
     public function scan(): array
     {
         $processes = utf8_encode(trim((string)shell_exec(self::COMMAND)))
-            ?: throw new SystemScanningFailure();
+                     ?: throw new SystemScanningFailure();
 
-        $processes = preg_split('/\n|\r\n/', $processes);
-        return array_splice($processes, 2);
+        return array_splice(preg_split('/\n|\r\n/', $processes), 2);
     }
 }

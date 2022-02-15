@@ -13,15 +13,12 @@ final class ProcessParsingFailure extends \LogicException implements Exception
      * @param \Throwable|null $previous
      */
     public function __construct(
-        private string $process,
+        string $process,
         string $message = "",
         int $code = 0,
         ?\Throwable $previous = null
     ) {
-        if (!$message) {
-            $message = "The process cannot be parsed." . PHP_EOL . $this->process;
-        }
-
+        $message = $message ?: "The process cannot be parsed." . PHP_EOL . $process;
         parent::__construct($message, $code, $previous);
     }
 }

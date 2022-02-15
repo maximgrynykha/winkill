@@ -58,19 +58,19 @@ final class WindowsProcess implements Process, \Stringable
         if (str_contains($process_name, '.')
             || str_contains($this->process_name, '.')
         ) {
-            $accepted_process_name_segments = explode(
+            $process_name_segments_in_argument = explode(
                 separator: '.',
                 string: $process_name
             );
 
-            $internal_process_name_segments = explode(
+            $process_name_segments_in_instance = explode(
                 separator: '.',
                 string: mb_strtolower($this->process_name)
             );
 
             $is_handled = empty(array_diff(
-                $accepted_process_name_segments,
-                $internal_process_name_segments
+                $process_name_segments_in_argument,
+                $process_name_segments_in_instance
             ));
         }
 

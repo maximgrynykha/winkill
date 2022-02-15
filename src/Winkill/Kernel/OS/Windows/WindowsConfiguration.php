@@ -2,37 +2,48 @@
 
 namespace Winkill\Kernel\OS\Windows;
 
-use Winkill\Kernel\Interface\Configuration;
-use Winkill\Kernel\Interface\ProcessKilling;
-use Winkill\Kernel\Interface\ProcessParsing;
-use Winkill\Kernel\Interface\SystemScanning;
-use Winkill\Kernel\OS\Windows\Execution\Killing\WindowsProcessKillingById;
-use Winkill\Kernel\OS\Windows\Execution\WindowsProcessParsing;
-use Winkill\Kernel\OS\Windows\Execution\WindowsSystemScanning;
+use Winkill\Kernel\Interface\{
+    Configuration,
+    ProcessTermination,
+    ProcessParsing,
+    SystemScanning
+};
+use Winkill\Kernel\OS\Common\Configuration as CachedConfiguration;
+use Winkill\Kernel\OS\Windows\Execution\{
+    Termination\WindowsProcessTerminationById,
+    WindowsProcessParsing,
+    WindowsSystemScanning
+};
 
-final class WindowsConfiguration implements Configuration
+final class WindowsConfiguration extends CachedConfiguration implements Configuration
 {
     /**
      * @return SystemScanning
-     */
+    */
     public function createScanningStrategy(): SystemScanning
     {
-        return new WindowsSystemScanning();
+        $this->cache[SystemScanning::class] ??= new WindowsSystemScanning();
+        
+        return parent::getCachedScanningStrategy();
     }
 
     /**
      * @return ProcessParsing
-     */
+    */
     public function createParsingStrategy(): ProcessParsing
     {
-        return new WindowsProcessParsing();
+        $this->cache[ProcessParsing::class] ??= new WindowsProcessParsing();
+        
+        return parent::getCachedParsingStrategy();
     }
 
     /**
-     * @return ProcessKilling
-     */
-    public function createTerminationStrategy(): ProcessKilling
+     * @return ProcessTermination
+    */
+    public function createTerminationStrategy(): ProcessTermination
     {
-        return new WindowsProcessKillingById();
+        $this->cache[ProcessTermination::class] ??= new WindowsProcessTerminationById();
+
+        return parent::getCachedTerminationStrategy();
     }
 }

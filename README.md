@@ -95,11 +95,14 @@ $processes->where('process_name', '=', 'chrome')->kill();
 
 $processes->where('process_id', '=', 11455)->kill();
 
-//❗Alert: killing processes by attribute [session_name]
+//❗Alert: killing process(es) by attribute [session_name]
 // may break you 🤯 and/or your computer 💥. Use it only 
 // if you are 100% confident at the ending result.
 $processes->where('session_name', '=', 'console')->kill();
 
+//❗Alert: killing process(es) by attribute [session_number] 
+// is the same danger as was said previously about attribute 
+// [session_name], so be warned about using it at your risk.
 $processes->where('session_number', '=', 1)->kill();
 
 // ⚠️ Note: consumed memory is estimated in Kb(kilobytes)

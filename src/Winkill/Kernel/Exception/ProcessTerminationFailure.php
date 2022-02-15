@@ -2,10 +2,9 @@
 
 namespace Winkill\Kernel\Exception;
 
-use Winkill\Kernel\Interface\Exception;
-use Winkill\Kernel\Interface\Process;
+use Winkill\Kernel\Interface\{Exception, Process};
 
-final class ProcessKillingFailure extends \LogicException implements Exception
+final class ProcessTerminationFailure extends \LogicException implements Exception
 {
     /**
      * @param Process $process
@@ -14,15 +13,12 @@ final class ProcessKillingFailure extends \LogicException implements Exception
      * @param \Throwable|null $previous
      */
     public function __construct(
-        private Process $process,
+        Process $process,
         string $message = "",
         int $code = 0,
         ?\Throwable $previous = null
     ) {
-        if (!$message) {
-            $message = 'The process cannot be killed.' . PHP_EOL . $this->process;
-        }
-
+        $message = $message ?: 'The process cannot be killed.' . PHP_EOL . $process;
         parent::__construct($message, $code, $previous);
     }
 }

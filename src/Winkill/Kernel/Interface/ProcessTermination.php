@@ -2,21 +2,21 @@
 
 namespace Winkill\Kernel\Interface;
 
-use Winkill\Kernel\Exception\ProcessKillingFailure;
+use Winkill\Kernel\Exception\ProcessTerminationFailure;
 
 /**
  * Strategy Pattern
  *
  * @see https://refactoring.guru/design-patterns/strategy
  */
-interface ProcessKilling
+interface ProcessTermination
 {
     /**
      * @param Process $process
      *
      * @return void
      *
-     * @throws ProcessKillingFailure
+     * @throws ProcessTerminationFailure
      */
-    public function kill(Process $process): void;
+    public function terminate(Process $process): void;
 }

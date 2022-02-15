@@ -20,7 +20,7 @@ interface Configuration
     public function createParsingStrategy(): ProcessParsing;
 
     /**
-     * @return ProcessKilling
+     * @return ProcessTermination
      */
-    public function createTerminationStrategy(): ProcessKilling;
+    public function createTerminationStrategy(): ProcessTermination;
 }

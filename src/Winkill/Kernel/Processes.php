@@ -2,13 +2,17 @@
 
 namespace Winkill\Kernel;
 
-use Winkill\Kernel\Exception\ProcessKillingFailure;
-use Winkill\Kernel\Exception\ProcessParsingFailure;
-use Winkill\Kernel\Exception\SystemScanningFailure;
-use Winkill\Kernel\Exception\UnsupportedCompareOperator;
-use Winkill\Kernel\Interface\Configuration;
-use Winkill\Kernel\Interface\Process;
-use Winkill\Kernel\Interface\ProcessKilling;
+use Winkill\Kernel\Exception\{
+    ProcessTerminationFailure,
+    ProcessParsingFailure,
+    SystemScanningFailure,
+    UnsupportedComparisonOperator
+};
+use Winkill\Kernel\Interface\{
+    Configuration,
+    Process,
+    ProcessTermination,
+};
 use Winkill\Kernel\OS\Common\Comparison;
 
 /**
@@ -19,14 +23,14 @@ use Winkill\Kernel\OS\Common\Comparison;
 final class Processes
 {
     /**
-     * Objects Collection
+     * Object Collection
      *
      * @var Process[]|array<int, Process>
      */
     private array $scanned;
 
     /**
-     * Objects Collection
+     * Object Collection
      *
      * @var array<string, bool|array<int, Process>>
      */
@@ -36,19 +40,23 @@ final class Processes
      * @param Configuration $factory
      *
      * @throws SystemScanningFailure
+     * @throws ProcessParsingFailure
      */
-    public function __construct(
-        private readonly Configuration $factory,
-    )
+    public function __construct(private readonly Configuration $factory)
     {
-        $this->scanned = $this->scan();
+        $scanning_strategy = $this->factory->createScanningStrategy();
+        $parsing_strategy = $this->factory->createParsingStrategy();
+        
+        foreach ($scanning_strategy->scan() as $process) {
+            $this->scanned[] = $parsing_strategy->parse($process);
+        }
 
         $this->selected['is'] = false;
         $this->selected['processes'] = [];
     }
 
     /**
-     * Return array of selected or scanned processes
+     * Return an array of selected or scanned processes
      * 
      * (Note: this method is non-idempotent - in one 
      * case, it returns one thing, in the other case, 
@@ -77,8 +85,8 @@ final class Processes
     {
         $this->selected['is'] = ! $this->selected['is'];
 
-        return (! $this->selected['is'])
-            ? $this->selected['processes']
+        return (! $this->selected['is']) 
+            ? $this->selected['processes'] 
             : $this->scanned;
     }
 
@@ -111,25 +119,23 @@ final class Processes
      *
      * @return $this
      *
-     * @throws UnsupportedCompareOperator
+     * @throws UnsupportedComparisonOperator
      */
     public function where(
         string     $attribute,
         string     $compareAs,
         int|string $value
-    ): self
+    ): static
     {
-        if (!in_array(trim($compareAs), Comparison::values())) {
-            throw new UnsupportedCompareOperator();
+        if (! in_array(trim($compareAs), Comparison::values())) {
+            throw new UnsupportedComparisonOperator($compareAs);
         }
 
         $this->selected['processes'] = []; // Remove all previous selected processes
         $this->selected['is'] = false; // Begin processes selection
 
         foreach ($this->scanned as $process) {
-            $is_handled = $process->handleAttribute(
-                $attribute, $compareAs, $value
-            );
+            $is_handled = $process->handleAttribute($attribute, $compareAs, $value);
 
             if ($is_handled) $this->selected['processes'][] = $process;
         }
@@ -156,8 +162,8 @@ final class Processes
      * )->kill();
      * ```
      *
-     * You can create your own process killing strategy by implementing
-     * kernel interface {@see \Winkill\Kernel\Interface\ProcessKilling}
+     * You can create your own process termination strategy by implementing
+     * kernel interface {@see \Winkill\Kernel\Interface\ProcessTermination}
      *
      * The custom strategy will execute for each of selected processes
      * (from processes selected by using $processes->where(...)).
@@ -170,47 +176,29 @@ final class Processes
      *      attribute: 'consumed_memory',
      *      compareAs: '=',
      *      value: 500
-     * )->kill(strategy: new CustomKilling());
+     * )->kill(strategy: new CustomTermination());
      * ```
      *
-     * @param ProcessKilling|null $strategy
+     * @param ProcessTermination|null $strategy
      *
      * @return Process[]|array<int, Process> Those processes from
      *                                       the selected which were killed.
      *
-     * @throws ProcessKillingFailure
+     * @throws ProcessTerminationFailure
      */
-    public function kill(?ProcessKilling $strategy = null): array
+    public function kill(?ProcessTermination $strategy = null): array
     {
         /** @var Process[]|array<int, Process> $killed */
         $killed = [];
 
-        $strategy = $strategy ?: $this->factory->createTerminationStrategy();
+        /** @var ProcessTermination $termination_strategy */
+        $termination_strategy = $strategy ?: $this->factory->createTerminationStrategy();
 
         foreach ($this->selected['processes'] as $process) {
-            $strategy->kill($process);
+            $termination_strategy->terminate($process);
             $killed[] = $process;
         }
 
         return $killed;
-    }
-
-    /**
-     * Return array of process instances
-     * by parsing the OS-scanning output
-     *
-     * @return Process[]|array<int, Process>
-     *
-     * @throws SystemScanningFailure
-     * @throws ProcessParsingFailure
-     */
-    private function scan(): array
-    {
-        $parser = $this->factory->createParsingStrategy();
-
-        return array_map(
-            static fn(string $process): Process => $parser->parse($process),
-            $this->factory->createScanningStrategy()->scan()
-        );
     }
 }

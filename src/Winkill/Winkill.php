@@ -2,8 +2,7 @@
 
 namespace Winkill;
 
-use Winkill\Kernel\Exception\UnknownOperatingSystem;
-use Winkill\Kernel\Exception\UnsupportedOperatingSystem;
+use Winkill\Kernel\Exception\{UnknownOperatingSystem, UnsupportedOperatingSystem};
 use Winkill\Kernel\Interface\Configuration;
 use Winkill\Kernel\OS\Windows\WindowsConfiguration;
 use Winkill\Kernel\Processes;
@@ -14,7 +13,7 @@ final class Winkill
      * @param Configuration|null $factory
      */
     public function __construct(
-        private ?Configuration $factory = null,
+        private readonly ?Configuration $factory = null,
     ) {}
 
     /**

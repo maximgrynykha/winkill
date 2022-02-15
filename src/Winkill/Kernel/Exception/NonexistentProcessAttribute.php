@@ -13,17 +13,13 @@ final class NonexistentProcessAttribute extends \InvalidArgumentException implem
      * @param \Throwable|null $previous
      */
     public function __construct(
-        private string $attribute,
+        string $attribute,
         string $message = "",
         int $code = 0,
         ?\Throwable $previous = null
     ) {
-        if (!$message) {
-            $message =
-                "The attribute: [$this->attribute] doesn't exist
-                 in processes on [" . PHP_OS_FAMILY . "] OS.";
-        }
-
+        $message = $message ?: "The attribute: [$attribute] doesn't exist 
+                                in processes on [" . PHP_OS_FAMILY . "] OS.";
         parent::__construct($message, $code, $previous);
     }
 }

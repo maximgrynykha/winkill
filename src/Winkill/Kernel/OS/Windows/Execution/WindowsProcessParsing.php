@@ -3,8 +3,7 @@
 namespace Winkill\Kernel\OS\Windows\Execution;
 
 use Winkill\Kernel\Exception\ProcessParsingFailure;
-use Winkill\Kernel\Interface\Process;
-use Winkill\Kernel\Interface\ProcessParsing;
+use Winkill\Kernel\Interface\{Process, ProcessParsing};
 use Winkill\Kernel\OS\Windows\WindowsProcess;
 
 final class WindowsProcessParsing implements ProcessParsing

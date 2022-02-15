@@ -10,8 +10,8 @@ namespace Winkill\Kernel\Interface;
 interface Process
 {
     /**
-     * Attribute name compare as {compare operator} to the value.
-     * Supporting operators: {@see \Winkill\Kernel\OS\Common\Comparison}.
+     * Attribute name compare as {comparison operator} to the value.
+     * Supported operators: {@see \Winkill\Kernel\OS\Common\Comparison}.
      *
      * @param string $attribute
      * @param string $compareAs
