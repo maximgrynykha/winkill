@@ -123,7 +123,7 @@ final class Processes
      */
     public function where(
         string     $attribute,
-        string     $compareAs,g
+        string     $compareAs,
         int|string $value
     ): static
     {
