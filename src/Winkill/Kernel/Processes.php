@@ -123,7 +123,7 @@ final class Processes
      */
     public function where(
         string     $attribute,
-        string     $compareAs,
+        string     $compareAs,g
         int|string $value
     ): static
     {
@@ -135,9 +135,9 @@ final class Processes
         $this->selected['is'] = false; // Begin processes selection
 
         foreach ($this->scanned as $process) {
-            $is_handled = $process->handleAttribute($attribute, $compareAs, $value);
-
-            if ($is_handled) $this->selected['processes'][] = $process;
+            if ($process->handleAttribute($attribute, $compareAs, $value)) {
+                $this->selected['processes'][] = $process;
+            }
         }
 
         $this->selected['is'] = true; // Finish processes selection
