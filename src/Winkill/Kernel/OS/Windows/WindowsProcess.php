@@ -38,9 +38,9 @@ final class WindowsProcess implements Process, \Stringable
     {
         return match (trim($attribute)) {
             'process_name' => $this->handleProcessName(mb_strtolower(trim((string)$value))),
-            'process_id' => $this->process_id === $value,
+            'process_id' => $this->process_id === (int) $value,
             'session_name' => $this->session_name === mb_strtolower(trim((string)$value)),
-            'session_number' => $this->session_number === $value,
+            'session_number' => $this->session_number === (int) $value,
             'consumed_memory' => $this->handleConsumedMemory($value, trim($compareAs)),
             default => throw new NonexistentProcessAttribute($attribute)
         };
