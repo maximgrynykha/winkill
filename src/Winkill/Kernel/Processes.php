@@ -155,7 +155,7 @@ final class Processes
      * $winkill = new Winkill();
      * $processes = $winkill->scan();
      *
-     * $killed = $processes->where(
+     * $terminated = $processes->where(
      *      attribute: 'consumed_memory',
      *      compareAs: '=',
      *      value: 500
@@ -172,7 +172,7 @@ final class Processes
      * $winkill = new Winkill();
      * $processes = $winkill->scan();
      *
-     * $killed = $processes->where(
+     * $terminated = $processes->where(
      *      attribute: 'consumed_memory',
      *      compareAs: '=',
      *      value: 500
@@ -182,23 +182,23 @@ final class Processes
      * @param ProcessTermination|null $strategy
      *
      * @return Process[]|array<int, Process> Those processes from
-     *                                       the selected which were killed.
+     *                                       the selected which were terminated.
      *
      * @throws ProcessTerminationFailure
      */
     public function kill(?ProcessTermination $strategy = null): array
     {
-        /** @var Process[]|array<int, Process> $killed */
-        $killed = [];
+        /** @var Process[]|array<int, Process> $terminated */
+        $terminated = [];
 
         /** @var ProcessTermination $termination_strategy */
         $termination_strategy = $strategy ?: $this->factory->createTerminationStrategy();
 
         foreach ($this->selected['processes'] as $process) {
             $termination_strategy->terminate($process);
-            $killed[] = $process;
+            $terminated[] = $process;
         }
 
-        return $killed;
+        return $terminated;
     }
 }
