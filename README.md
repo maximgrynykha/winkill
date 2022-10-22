@@ -144,7 +144,7 @@ usort($processes, static fn(Process $process, Process $_process): int =>
 
 ## 📝 Footnotes
 
-_The project follows `SOLID` principles as much as possible, 
+_The project follows `SOLID` principles as much as possible,  
 also paying attention to `DRY`.  
 Here is a list of the `Design Patterns` used in the project_:
 
