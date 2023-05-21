@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Winkill\Kernel\OS\Windows;
 
@@ -23,7 +25,7 @@ final class WindowsConfiguration extends CachedConfiguration implements Configur
     public function createScanningStrategy(): SystemScanning
     {
         $this->cache[SystemScanning::class] ??= new WindowsSystemScanning();
-        
+
         return parent::getCachedScanningStrategy();
     }
 
@@ -33,7 +35,7 @@ final class WindowsConfiguration extends CachedConfiguration implements Configur
     public function createParsingStrategy(): ProcessParsing
     {
         $this->cache[ProcessParsing::class] ??= new WindowsProcessParsing();
-        
+
         return parent::getCachedParsingStrategy();
     }
 

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Winkill\Kernel;
 
@@ -46,7 +48,7 @@ final class Processes
     {
         $scanning_strategy = $this->factory->createScanningStrategy();
         $parsing_strategy = $this->factory->createParsingStrategy();
-        
+
         foreach ($scanning_strategy->scan() as $process) {
             $this->scanned[] = $parsing_strategy->parse($process);
         }
@@ -57,11 +59,11 @@ final class Processes
 
     /**
      * Return an array of selected or scanned processes
-     * 
-     * (Note: this method is non-idempotent - in one 
-     * case, it returns one thing, in the other case, 
+     *
+     * (Note: this method is non-idempotent - in one
+     * case, it returns one thing, in the other case,
      * something else.)
-     * 
+     *
      * Usage:
      *
      * ```
@@ -85,8 +87,8 @@ final class Processes
     {
         $this->selected['is'] = ! $this->selected['is'];
 
-        return (! $this->selected['is']) 
-            ? $this->selected['processes'] 
+        return (! $this->selected['is'])
+            ? $this->selected['processes']
             : $this->scanned;
     }
 
@@ -122,11 +124,10 @@ final class Processes
      * @throws UnsupportedComparisonOperator
      */
     public function where(
-        string     $attribute,
-        string     $compareAs,
+        string $attribute,
+        string $compareAs,
         int|string $value
-    ): static
-    {
+    ): static {
         if (! in_array(trim($compareAs), Comparison::values())) {
             throw new UnsupportedComparisonOperator($compareAs);
         }

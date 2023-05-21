@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Winkill\Kernel\OS\Windows;
 
@@ -21,7 +23,8 @@ final class WindowsProcess implements Process, \Stringable
         public readonly string $session_name,
         public readonly int $session_number,
         public readonly int $consumed_memory
-    ) {}
+    ) {
+    }
 
     /**
      * @param string $attribute
@@ -31,11 +34,10 @@ final class WindowsProcess implements Process, \Stringable
      * @return bool
      */
     public function handleAttribute(
-        string     $attribute,
-        string     $compareAs,
+        string $attribute,
+        string $compareAs,
         int|string $value
-    ): bool
-    {
+    ): bool {
         return match (trim($attribute)) {
             'process_name' => $this->handleProcessName(mb_strtolower(trim((string)$value))),
             'process_id' => $this->process_id === (int) $value,
@@ -85,9 +87,8 @@ final class WindowsProcess implements Process, \Stringable
      */
     private function handleConsumedMemory(
         int|string $consumed_memory,
-        string     $compareAs
-    ): bool
-    {
+        string $compareAs
+    ): bool {
         return (is_int($consumed_memory) && Comparison::tryFrom($compareAs)
                 ->compare($this->consumed_memory, $consumed_memory));
     }

@@ -18,34 +18,34 @@ abstract class Configuration
 
     /**
      * @return SystemScanning
-     * 
+     *
      * @throws UncachedStrategy
     */
     protected function getCachedScanningStrategy(): SystemScanning
     {
-        return $this->cache[SystemScanning::class] 
+        return $this->cache[SystemScanning::class]
                 ?? throw new UncachedStrategy(SystemScanning::class);
     }
 
     /**
      * @return ProcessParsing
-     * 
+     *
      * @throws UncachedStrategy
     */
     protected function getCachedParsingStrategy(): ProcessParsing
     {
-        return $this->cache[ProcessParsing::class] 
+        return $this->cache[ProcessParsing::class]
                 ?? throw new UncachedStrategy(ProcessParsing::class);
     }
 
     /**
      * @return ProcessTermination
-     * 
+     *
      * @throws UncachedStrategy
     */
     protected function getCachedTerminationStrategy(): ProcessTermination
     {
-        return $this->cache[ProcessTermination::class] 
+        return $this->cache[ProcessTermination::class]
                 ?? throw new UncachedStrategy(ProcessTermination::class);
     }
 }

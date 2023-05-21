@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Winkill\Kernel\Exception;
 
@@ -8,16 +10,16 @@ use Winkill\Kernel\OS\Common\Comparison;
 final class UnsupportedComparisonOperator extends \InvalidArgumentException implements Exception
 {
     /**
-     * @param string $operator 
-     * @param string $message 
-     * @param int $code 
-     * @param \Throwable|null $previous 
-     * 
-     * @return void 
+     * @param string $operator
+     * @param string $message
+     * @param int $code
+     * @param \Throwable|null $previous
+     *
+     * @return void
      */
     public function __construct(
         string $operator,
-        string $message = "",  
+        string $message = "",
         int $code = 0,
         ?\Throwable $previous = null
     ) {
