@@ -42,7 +42,7 @@ enum Comparison: string
     public static function values(): array
     {
         return array_map(
-            static fn(self $operator): string => $operator->value,
+            static fn (self $operator): string => $operator->value,
             self::cases()
         );
     }
@@ -59,30 +59,30 @@ enum Comparison: string
     {
         return (bool)match ($this) {
             self::MORE_THAN => array_map(
-                static fn(mixed $value): bool => $compared > $value,
+                static fn (mixed $value): bool => $compared > $value,
                 $values
             ),
             self::LESS_THAN => array_map(
-                static fn(mixed $value): bool => $compared < $value,
+                static fn (mixed $value): bool => $compared < $value,
                 $values
             ),
 
             self::EQUAL => array_map(
-                static fn(mixed $value): bool => $compared == $value,
+                static fn (mixed $value): bool => $compared == $value,
                 $values
             ),
 
             self::MORE_THAN_OR_EQUAL => array_map(
-                static fn(mixed $value): bool => $compared >= $value,
+                static fn (mixed $value): bool => $compared >= $value,
                 $values
             ),
             self::LESS_THAN_OR_EQUAL => array_map(
-                static fn(mixed $value): bool => $compared <= $value,
+                static fn (mixed $value): bool => $compared <= $value,
                 $values
             ),
 
             self::NOT_EQUAL => array_map(
-                static fn(mixed $value): bool => $compared != $value,
+                static fn (mixed $value): bool => $compared != $value,
                 $values
             ),
         };

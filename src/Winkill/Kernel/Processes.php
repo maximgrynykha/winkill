@@ -133,7 +133,7 @@ final class Processes
         string $compareAs,
         int|string $value
     ): Processes {
-        if (! in_array(trim($compareAs), Comparison::values())) {
+        if (!in_array(trim($compareAs), Comparison::values())) {
             throw new UnsupportedComparisonOperator($compareAs);
         }
 
