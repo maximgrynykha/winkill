@@ -1,4 +1,4 @@
-![Build Status](https://img.shields.io/github/workflow/status/MaximGrynykha/winkill/Build?label=build&logo=github&logoColor=white&style=for-the-badge)
+![Build Status](https://img.shields.io/github/actions/workflow/status/maximgrynykha/winkill/main.yml?style=for-the-badge&logo=github&logoColor=white&label=build)
 
 # __Winkill__
 
