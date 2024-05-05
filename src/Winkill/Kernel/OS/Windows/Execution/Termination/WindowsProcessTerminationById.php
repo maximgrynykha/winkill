@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Winkill\Kernel\OS\Windows\Execution\Termination;
 
@@ -18,9 +20,11 @@ final class WindowsProcessTerminationById implements ProcessTermination
      */
     public function terminate(Process $process): void
     {
+        $attribute = escapeshellarg("$process->process_id");
+
         exec((string)str_replace(
             search: '<attribute>',
-            replace: (string)$process->process_id,
+            replace: $attribute,
             subject: self::COMMAND
         )) ?: throw new ProcessTerminationFailure($process);
     }

@@ -2,50 +2,45 @@
 
 namespace Winkill\Kernel\OS\Common;
 
-use Winkill\Kernel\Exception\UncachedStrategy;
 use Winkill\Kernel\Interface\{
     ProcessParsing,
     ProcessTermination,
     SystemScanning
 };
+use Winkill\Kernel\Interface\Configuration as ConfigurationInterface;
 
-abstract class Configuration
+class Configuration implements ConfigurationInterface
 {
     /**
      * @var array
      */
     protected array $cache = [];
 
+    public function __construct(protected readonly ConfigurationInterface $configuration)
+    {
+    }
+
     /**
      * @return SystemScanning
-     * 
-     * @throws UncachedStrategy
-    */
-    protected function getCachedScanningStrategy(): SystemScanning
+     */
+    public function createScanningStrategy(): SystemScanning
     {
-        return $this->cache[SystemScanning::class] 
-                ?? throw new UncachedStrategy(SystemScanning::class);
+        return $this->cache[SystemScanning::class] ??= $this->configuration->createScanningStrategy();
     }
 
     /**
      * @return ProcessParsing
-     * 
-     * @throws UncachedStrategy
-    */
-    protected function getCachedParsingStrategy(): ProcessParsing
+     */
+    public function createParsingStrategy(): ProcessParsing
     {
-        return $this->cache[ProcessParsing::class] 
-                ?? throw new UncachedStrategy(ProcessParsing::class);
+        return $this->cache[ProcessParsing::class] ??= $this->configuration->createParsingStrategy();
     }
 
     /**
      * @return ProcessTermination
-     * 
-     * @throws UncachedStrategy
-    */
-    protected function getCachedTerminationStrategy(): ProcessTermination
+     */
+    public function createTerminationStrategy(): ProcessTermination
     {
-        return $this->cache[ProcessTermination::class] 
-                ?? throw new UncachedStrategy(ProcessTermination::class);
+        return $this->cache[ProcessTermination::class] ??= $this->configuration->createTerminationStrategy();
     }
 }

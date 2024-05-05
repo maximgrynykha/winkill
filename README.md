@@ -2,7 +2,7 @@
 
 # __Winkill__
 
-Allows work with processes as object instances for each concrete process & select specific ones by some attributes and kill them if needed.
+Work with processes as objects. Find specific ones by attributes and kill them.
 
 ## ⚙️ Installation
 
@@ -50,9 +50,10 @@ try {
         attribute: 'process_id',
         compareAs: '=',
         value: 11492
-    )->kill();  // Note if the process(es) has been already killed 
-                // or not found by the where-condition then returns an empty array.
-    
+    )->kill();  
+
+    // Note: If the processes have been killed or not found 
+    // by the where-condition then returns an empty array.
     dd($killed);
 ```
 
@@ -63,15 +64,15 @@ try {
 ```
 
 ### API (based on 'tasklist' command)
-| Attribute name    | Attribute Value                 | Example                | Compare Operator |
-|:------------------|:--------------------------------|:-----------------------|:------------------|
-| `process_name`    | [string]: simple name           | chrome / figma         | [string]: `>`     |
-|                   | [string]: name with .ext        | chrome.exe / figma.exe | [string]: `<`     |
-|                   | [string]: uppercase name        | Chrome.exe / Figma.exe | [string]: `=`     |
-| `process_id`      | [int]: number of the id         |                        | [string]: `>=`    |
-| `session_name`    | [string]: Console / Services    |                        | [string]: `<=`    |
-| `session_number`  | [int]: number in range of {0-1} |                        | [string]: `!=`    |
-| `consumed_memory` | [int]: amount in Kb(kilobytes)  |                        |                   |
+| Attribute name    | Compare operator                          | Attribute value                 | Example                |
+|:------------------|:------------------------------------------|:--------------------------------|:-----------------------|
+| `process_name`    | [string]: `=`, `!=`                       | [string]: simple name           | chrome / figma         |
+|                   | [string]: `=`, `!=`                       | [string]: name with .ext        | chrome.exe / figma.exe |
+|                   | [string]: `=`, `!=`                       | [string]: uppercase name        | Chrome.exe / Figma.exe |
+| `process_id`      | [string]: `=`, `!=`                       | [int]: number of the ID         |                        |
+| `session_name`    | [string]: `=`, `!=`                       | [string]: Console / Services    |                        |
+| `session_number`  | [string]: `=`, `!=`                       | [int]: number in range of {0-1} |                        |
+| `consumed_memory` | [string]: `>`, `<`, `=`, `>=`, `<=`, `!=` | [int]: number in Kb(kilobytes)  |                        |
 
 ### Select processes
 
@@ -144,15 +145,13 @@ usort($processes, static fn(Process $process, Process $_process): int =>
 
 ## 📝 Footnotes
 
-_The project follows `SOLID` principles as much as possible,  
-also paying attention to `DRY`.  
-Here is a list of the `Design Patterns` used in the project_:
+_`DRY`, `SOLID` principles and `Design Patterns`_ are used.
 
-| Creational                                                                      | Behavioral                                                      | Others*                                                                 |
-|:--------------------------------------------------------------------------------|:----------------------------------------------------------------|:------------------------------------------------------------------------|
-| [`Factory Method`](https://refactoring.guru/design-patterns/factory-method)     | [`Strategy`](https://refactoring.guru/design-patterns/strategy) | [`Composition Root`](https://blog.ploeh.dk/2011/07/28/CompositionRoot/) |
-| [`Abstract Factory`](https://refactoring.guru/design-patterns/abstract-factory) | [`Command`](https://refactoring.guru/design-patterns/command)   |                                                                         |
-| [`Builder`](https://refactoring.guru/design-patterns/builder)                   |                                                                 |                                                                         |
+| Creational                                                                      | Structural                                                  | Behavioral                                                      | Others*                                                                 |
+|---------------------------------------------------------------------------------|:------------------------------------------------------------|:----------------------------------------------------------------|:------------------------------------------------------------------------|
+| [`Abstract Factory`](https://refactoring.guru/design-patterns/abstract-factory) | [`Facade`](https://refactoring.guru/design-patterns/facade) | [`Strategy`](https://refactoring.guru/design-patterns/strategy) | [`Composition Root`](https://blog.ploeh.dk/2011/07/28/CompositionRoot/) |
+| [`Factory Method`](https://refactoring.guru/design-patterns/factory-method)     |                                                             | [`Iterator`](https://refactoring.guru/design-patterns/iterator) |                                                                         |
+| [`Builder`](https://refactoring.guru/design-patterns/builder)                   |                                                             | [`Command`](https://refactoring.guru/design-patterns/command)   |                                                                         |
 
 
 ## 🤝 Contributing
