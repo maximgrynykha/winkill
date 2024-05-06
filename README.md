@@ -145,7 +145,7 @@ usort($processes, static fn(Process $process, Process $_process): int =>
 
 ## 📝 Footnotes
 
-_`DRY`, `SOLID` principles and `Design Patterns`_ are used.
+_The project utilizes `DRY` and `SOLID` principles. Used `Design Patterns` are listed below._
 
 | Creational                                                                      | Structural                                                  | Behavioral                                                      | Others*                                                                 |
 |---------------------------------------------------------------------------------|:------------------------------------------------------------|:----------------------------------------------------------------|:------------------------------------------------------------------------|
