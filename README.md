@@ -150,8 +150,8 @@ _`DRY`, `SOLID` principles and `Design Patterns`_ are used.
 | Creational                                                                      | Structural                                                  | Behavioral                                                      | Others*                                                                 |
 |---------------------------------------------------------------------------------|:------------------------------------------------------------|:----------------------------------------------------------------|:------------------------------------------------------------------------|
 | [`Abstract Factory`](https://refactoring.guru/design-patterns/abstract-factory) | [`Facade`](https://refactoring.guru/design-patterns/facade) | [`Strategy`](https://refactoring.guru/design-patterns/strategy) | [`Composition Root`](https://blog.ploeh.dk/2011/07/28/CompositionRoot/) |
-| [`Factory Method`](https://refactoring.guru/design-patterns/factory-method)     |                                                             | [`Iterator`](https://refactoring.guru/design-patterns/iterator) |                                                                         |
-| [`Builder`](https://refactoring.guru/design-patterns/builder)                   |                                                             | [`Command`](https://refactoring.guru/design-patterns/command)   |                                                                         |
+| [`Factory Method`](https://refactoring.guru/design-patterns/factory-method)     |                                                             | [`Command`](https://refactoring.guru/design-patterns/command)   |                                                                         |
+| [`Builder`](https://refactoring.guru/design-patterns/builder)                   |                                                             |                                                                 |                                                                         |
 
 
 ## 🤝 Contributing
