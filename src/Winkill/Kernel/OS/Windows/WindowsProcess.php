@@ -47,34 +47,37 @@ final class WindowsProcess implements Process, \Stringable
         string $compareAs,
         int|string $value
     ): bool {
+        $attribute = trim($attribute);
         $compareAs = trim($compareAs);
 
-        switch (trim($attribute)) {
+        switch ($attribute) {
             case 'process_name':
                 if (!in_array($c = Comparison::tryFrom($compareAs), [Comparison::EQUAL, Comparison::NOT_EQUAL])) {
                     throw UnsupportedAttributeComparisonOperator::from($attribute, $compareAs);
                 }
-                return $this->handleProcessName(mb_strtolower(trim((string)$value)));
+                $value = mb_strtolower(trim((string)$value));
+                return $this->handleProcessName($value, $c);
             case 'process_id':
                 if (!in_array($c = Comparison::tryFrom($compareAs), [Comparison::EQUAL, Comparison::NOT_EQUAL])) {
                     throw UnsupportedAttributeComparisonOperator::from($attribute, $compareAs);
                 }
-                return $c->compare($this->process_id, (int)$value);
+                return $c->compare($this->process_id, +$value);
             case 'session_name':
                 if (!in_array($c = Comparison::tryFrom($compareAs), [Comparison::EQUAL, Comparison::NOT_EQUAL])) {
                     throw UnsupportedAttributeComparisonOperator::from($attribute, $compareAs);
                 }
-                return $c->compare($this->session_name, mb_strtolower(trim((string)$value)));
+                $value = mb_strtolower(trim((string)$value));
+                return $c->compare($this->session_name, $value);
             case 'session_number':
                 if (!in_array($c = Comparison::tryFrom($compareAs), [Comparison::EQUAL, Comparison::NOT_EQUAL])) {
                     throw UnsupportedAttributeComparisonOperator::from($attribute, $compareAs);
                 }
-                return $c->compare($this->session_number, (int)$value);
+                return $c->compare($this->session_number, +$value);
             case 'consumed_memory':
                 if (!in_array($c = Comparison::tryFrom($compareAs), Comparison::values())) {
                     throw UnsupportedAttributeComparisonOperator::from($attribute, $compareAs);
                 }
-                return $this->handleConsumedMemory($value, $c);
+                return $c->compare($this->consumed_memory, +$value);
             default:
                 throw new NonexistentProcessAttribute($attribute);
         }
@@ -82,54 +85,30 @@ final class WindowsProcess implements Process, \Stringable
 
     /**
      * @param string $process_name
+     * @param Comparison $comparison
      *
      * @return bool
      */
-    private function handleProcessName(string $process_name): bool
+    private function handleProcessName(string $process_name, Comparison $comparison): bool
     {
-        $is_handled = $process_name === $this->process_name;
+        $is_handled = $comparison->compare($this->process_name, $process_name);
 
-        if (
-            str_contains($process_name, '.') ||
-            str_contains($this->process_name, '.')
-        ) {
-            $process_name_segments_in_argument = explode(
-                separator: '.',
-                string: $process_name
-            );
+        if (str_contains($process_name, '.') || str_contains($this->process_name, '.')) {
+            $process_name_segments_in_argument = explode('.', $process_name);
+            $process_name_segments_in_instance = explode('.', $this->process_name);
 
-            $process_name_segments_in_instance = explode(
-                separator: '.',
-                string: $this->process_name
-            );
-
-            $is_handled = empty(array_diff(
+            $diff = array_diff(
                 $process_name_segments_in_argument,
                 $process_name_segments_in_instance
-            ));
+            );
+
+            $is_handled = match ($comparison) {
+                Comparison::EQUAL => empty($diff),
+                Comparison::NOT_EQUAL => !empty($diff),
+            };
         }
 
         return $is_handled;
-    }
-
-    /**
-     * @param int|string $consumed_memory
-     * @param ?Comparison $comparison
-     *
-     * @return bool
-     */
-    private function handleConsumedMemory(
-        int|string $consumed_memory,
-        ?Comparison $comparison
-    ): bool {
-        if (!is_int($consumed_memory)) {
-            return false;
-        }
-
-        return $comparison?->compare(
-            $this->consumed_memory,
-            $consumed_memory
-        );
     }
 
     /**
