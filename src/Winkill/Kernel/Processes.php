@@ -43,7 +43,7 @@ final class Processes
     /**
      * @var bool
      */
-    private bool $semaphore;
+    private bool $semaphore = false;
 
     /**
      * @param Configuration $factory
@@ -59,8 +59,6 @@ final class Processes
         foreach ($scanning_strategy->scan() as $process) {
             $this->scanned[] = $parsing_strategy->parse($process);
         }
-
-        $this->semaphore = false;
     }
 
     /**
