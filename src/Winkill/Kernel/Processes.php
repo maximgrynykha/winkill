@@ -21,8 +21,8 @@ use Winkill\Kernel\OS\Common\Comparison;
  * Facade Pattern
  * Builder Pattern
  *
- * @link https://refactoring.guru/design-patterns/facade
- * @link https://refactoring.guru/design-patterns/builder
+ * @see https://refactoring.guru/design-patterns/facade
+ * @see https://refactoring.guru/design-patterns/builder
  */
 final class Processes
 {

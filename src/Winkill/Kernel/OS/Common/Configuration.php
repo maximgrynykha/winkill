@@ -9,6 +9,11 @@ use Winkill\Kernel\Interface\{
 };
 use Winkill\Kernel\Interface\Configuration as ConfigurationInterface;
 
+/**
+ * Proxy pattern
+ *
+ * @see https://refactoring.guru/design-patterns/proxy
+ */
 class Configuration implements ConfigurationInterface
 {
     /**
