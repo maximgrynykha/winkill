@@ -4,7 +4,11 @@ declare(strict_types=1);
 
 namespace Winkill;
 
-use Winkill\Kernel\Exception\{UnknownOperatingSystem, UnsupportedOperatingSystem};
+use Winkill\Kernel\Exception\{
+    SystemScanningFailure,
+    UnknownOperatingSystem,
+    UnsupportedOperatingSystem
+};
 use Winkill\Kernel\Interface\Configuration as ConfigurationInterface;
 use Winkill\Kernel\OS\Common\Configuration as CachingConfiguration;
 use Winkill\Kernel\OS\Windows\WindowsConfiguration;
@@ -35,7 +39,7 @@ final class Winkill
      *
      * @return Processes
      *
-     * @throws Kernel\Exception\SystemScanningFailure
+     * @throws SystemScanningFailure
      * @throws UnknownOperatingSystem
      * @throws UnsupportedOperatingSystem
      */
