@@ -51,27 +51,27 @@ final class WindowsProcess implements Process, \Stringable
 
         switch (trim($attribute)) {
             case 'process_name':
-                if (! in_array(Comparison::tryFrom($compareAs), [Comparison::EQUAL, Comparison::NOT_EQUAL])) {
+                if (!in_array(Comparison::tryFrom($compareAs), [Comparison::EQUAL, Comparison::NOT_EQUAL])) {
                     throw UnsupportedAttributeComparisonOperator::from($attribute, $compareAs);
                 }
                 return $this->handleProcessName(mb_strtolower(trim((string)$value)));
             case 'process_id':
-                if (! in_array(Comparison::tryFrom($compareAs), [Comparison::EQUAL, Comparison::NOT_EQUAL])) {
+                if (!in_array(Comparison::tryFrom($compareAs), [Comparison::EQUAL, Comparison::NOT_EQUAL])) {
                     throw UnsupportedAttributeComparisonOperator::from($attribute, $compareAs);
                 }
                 return $this->process_id === (int)$value;
             case 'session_name':
-                if (! in_array(Comparison::tryFrom($compareAs), [Comparison::EQUAL, Comparison::NOT_EQUAL])) {
+                if (!in_array(Comparison::tryFrom($compareAs), [Comparison::EQUAL, Comparison::NOT_EQUAL])) {
                     throw UnsupportedAttributeComparisonOperator::from($attribute, $compareAs);
                 }
                 return $this->session_name === mb_strtolower(trim((string)$value));
             case 'session_number':
-                if (! in_array(Comparison::tryFrom($compareAs), [Comparison::EQUAL, Comparison::NOT_EQUAL])) {
+                if (!in_array(Comparison::tryFrom($compareAs), [Comparison::EQUAL, Comparison::NOT_EQUAL])) {
                     throw UnsupportedAttributeComparisonOperator::from($attribute, $compareAs);
                 }
                 return $this->session_number === (int)$value;
             case 'consumed_memory':
-                if (! in_array($comparison = Comparison::tryFrom($compareAs), Comparison::values())) {
+                if (!in_array($comparison = Comparison::tryFrom($compareAs), Comparison::values())) {
                     throw UnsupportedAttributeComparisonOperator::from($attribute, $compareAs);
                 }
                 return $this->handleConsumedMemory($value, $comparison);
@@ -122,7 +122,7 @@ final class WindowsProcess implements Process, \Stringable
         int|string $consumed_memory,
         ?Comparison $comparison
     ): bool {
-        if (! is_int($consumed_memory)) {
+        if (!is_int($consumed_memory)) {
             return false;
         }
 
