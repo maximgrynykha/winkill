@@ -1,13 +1,22 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Winkill\Kernel\OS\Windows;
 
+use Winkill\Kernel\Exception\UnsupportedAttributeComparisonOperator;
 use Winkill\Kernel\Exception\NonexistentProcessAttribute;
 use Winkill\Kernel\Interface\Process;
 use Winkill\Kernel\OS\Common\Comparison;
 
 final class WindowsProcess implements Process, \Stringable
 {
+    public readonly string $process_name;
+    public readonly int $process_id;
+    public readonly string $session_name;
+    public readonly int $session_number;
+    public readonly int $consumed_memory;
+
     /**
      * @param string $process_name
      * @param int $process_id
@@ -16,12 +25,15 @@ final class WindowsProcess implements Process, \Stringable
      * @param int $consumed_memory
      */
     public function __construct(
-        public readonly string $process_name,
-        public readonly int $process_id,
-        public readonly string $session_name,
-        public readonly int $session_number,
-        public readonly int $consumed_memory
-    ) {}
+        string $process_name,
+        int $process_id,
+        string $session_name,
+        int $session_number,
+        int $consumed_memory
+    ) {
+        $this->process_name = mb_strtolower(trim($process_name));
+        $this->session_name = mb_strtolower(trim($session_name));
+    }
 
     /**
      * @param string $attribute
@@ -31,19 +43,41 @@ final class WindowsProcess implements Process, \Stringable
      * @return bool
      */
     public function handleAttribute(
-        string     $attribute,
-        string     $compareAs,
+        string $attribute,
+        string $compareAs,
         int|string $value
-    ): bool
-    {
-        return match (trim($attribute)) {
-            'process_name' => $this->handleProcessName(mb_strtolower(trim((string)$value))),
-            'process_id' => $this->process_id === (int) $value,
-            'session_name' => $this->session_name === mb_strtolower(trim((string)$value)),
-            'session_number' => $this->session_number === (int) $value,
-            'consumed_memory' => $this->handleConsumedMemory($value, trim($compareAs)),
-            default => throw new NonexistentProcessAttribute($attribute)
-        };
+    ): bool {
+        $compareAs = trim($compareAs);
+
+        switch (trim($attribute)) {
+            case 'process_name':
+                if (! in_array(Comparison::tryFrom($compareAs), [Comparison::EQUAL, Comparison::NOT_EQUAL])) {
+                    throw UnsupportedAttributeComparisonOperator::from($attribute, $compareAs);
+                }
+                return $this->handleProcessName(mb_strtolower(trim((string)$value)));
+            case 'process_id':
+                if (! in_array(Comparison::tryFrom($compareAs), [Comparison::EQUAL, Comparison::NOT_EQUAL])) {
+                    throw UnsupportedAttributeComparisonOperator::from($attribute, $compareAs);
+                }
+                return $this->process_id === (int)$value;
+            case 'session_name':
+                if (! in_array(Comparison::tryFrom($compareAs), [Comparison::EQUAL, Comparison::NOT_EQUAL])) {
+                    throw UnsupportedAttributeComparisonOperator::from($attribute, $compareAs);
+                }
+                return $this->session_name === mb_strtolower(trim((string)$value));
+            case 'session_number':
+                if (! in_array(Comparison::tryFrom($compareAs), [Comparison::EQUAL, Comparison::NOT_EQUAL])) {
+                    throw UnsupportedAttributeComparisonOperator::from($attribute, $compareAs);
+                }
+                return $this->session_number === (int)$value;
+            case 'consumed_memory':
+                if (! in_array($comparison = Comparison::tryFrom($compareAs), Comparison::values())) {
+                    throw UnsupportedAttributeComparisonOperator::from($attribute, $compareAs);
+                }
+                return $this->handleConsumedMemory($value, $comparison);
+            default:
+                throw new NonexistentProcessAttribute($attribute);
+        }
     }
 
     /**
@@ -53,10 +87,11 @@ final class WindowsProcess implements Process, \Stringable
      */
     private function handleProcessName(string $process_name): bool
     {
-        $is_handled = $process_name === mb_strtolower($this->process_name);
+        $is_handled = $process_name === $this->process_name;
 
-        if (str_contains($process_name, '.')
-            || str_contains($this->process_name, '.')
+        if (
+            str_contains($process_name, '.') ||
+            str_contains($this->process_name, '.')
         ) {
             $process_name_segments_in_argument = explode(
                 separator: '.',
@@ -65,7 +100,7 @@ final class WindowsProcess implements Process, \Stringable
 
             $process_name_segments_in_instance = explode(
                 separator: '.',
-                string: mb_strtolower($this->process_name)
+                string: $this->process_name
             );
 
             $is_handled = empty(array_diff(
@@ -79,17 +114,22 @@ final class WindowsProcess implements Process, \Stringable
 
     /**
      * @param int|string $consumed_memory
-     * @param string $compareAs
+     * @param ?Comparison $comparison
      *
      * @return bool
      */
     private function handleConsumedMemory(
         int|string $consumed_memory,
-        string     $compareAs
-    ): bool
-    {
-        return (is_int($consumed_memory) && Comparison::tryFrom($compareAs)
-                ->compare($this->consumed_memory, $consumed_memory));
+        ?Comparison $comparison
+    ): bool {
+        if (! is_int($consumed_memory)) {
+            return false;
+        }
+
+        return $comparison?->compare(
+            $this->consumed_memory,
+            $consumed_memory
+        );
     }
 
     /**

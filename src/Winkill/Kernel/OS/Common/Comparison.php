@@ -1,6 +1,10 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Winkill\Kernel\OS\Common;
+
+use Winkill\Kernel\Exception\UnsupportedComparisonOperator;
 
 enum Comparison: string
 {
@@ -13,6 +17,24 @@ enum Comparison: string
     case LESS_THAN_OR_EQUAL = '<=';
 
     case NOT_EQUAL = '!=';
+
+    /**
+     * @param string $comparison
+     *
+     * @return Comparison
+     * @throws \InvalidArgumentException
+     */
+    public static function hydrate(string $comparison): Comparison
+    {
+        try {
+            $comparison = mb_strtoupper(trim($comparison));
+            $instance = constant(self::class . "::$comparison");
+        } catch (\Error) {
+            throw new UnsupportedComparisonOperator($comparison);
+        }
+
+        return $instance;
+    }
 
     /**
      * @return string[]|array<int, string>

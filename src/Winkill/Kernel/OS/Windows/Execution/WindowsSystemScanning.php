@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Winkill\Kernel\OS\Windows\Execution;
 
@@ -16,9 +18,11 @@ final class WindowsSystemScanning implements SystemScanning
      */
     public function scan(): array
     {
-        $processes = utf8_encode(trim((string)shell_exec(self::COMMAND)))
+        $processes = shell_exec(self::COMMAND);
+        $processes = utf8_encode(trim((string)$processes))
                      ?: throw new SystemScanningFailure();
 
-        return array_splice(preg_split('/\n|\r\n/', $processes), 2);
+        $processes = preg_split('/\n|\r\n/', $processes);
+        return array_splice($processes, 2);
     }
 }

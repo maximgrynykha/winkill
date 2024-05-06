@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Winkill\Kernel\OS\Windows\Execution\Termination;
 
@@ -14,13 +16,15 @@ final class WindowsProcessTerminationByName implements ProcessTermination
      *
      * @return void
      *
-     * @throws ProcessKillingFailure
+     * @throws ProcessTerminationFailure
      */
     public function terminate(Process $process): void
     {
+        $attribute = escapeshellarg($process->process_name);
+
         exec((string)str_replace(
             search: '<attribute>',
-            replace: $process->process_name,
+            replace: $attribute,
             subject: self::COMMAND
         )) ?: throw new ProcessTerminationFailure($process);
     }

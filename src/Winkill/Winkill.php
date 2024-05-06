@@ -1,20 +1,24 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Winkill;
 
 use Winkill\Kernel\Exception\{UnknownOperatingSystem, UnsupportedOperatingSystem};
-use Winkill\Kernel\Interface\Configuration;
+use Winkill\Kernel\Interface\Configuration as ConfigurationInterface;
+use Winkill\Kernel\OS\Common\Configuration as CachingConfiguration;
 use Winkill\Kernel\OS\Windows\WindowsConfiguration;
 use Winkill\Kernel\Processes;
 
 final class Winkill
 {
     /**
-     * @param Configuration|null $factory
+     * @param ConfigurationInterface|null $factory
      */
     public function __construct(
-        private readonly ?Configuration $factory = null,
-    ) {}
+        private readonly ?ConfigurationInterface $factory = null,
+    ) {
+    }
 
     /**
      * Composition Root
@@ -38,7 +42,7 @@ final class Winkill
     public function scan(): Processes
     {
         $factory = match (PHP_OS_FAMILY) {
-            'Windows' => new WindowsConfiguration(),
+            'Windows' => new CachingConfiguration(new WindowsConfiguration()),
             'Unknown' => throw new UnknownOperatingSystem(),
             default => throw new UnsupportedOperatingSystem()
         };

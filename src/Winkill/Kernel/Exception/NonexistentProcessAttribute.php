@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Winkill\Kernel\Exception;
 
@@ -18,7 +20,7 @@ final class NonexistentProcessAttribute extends \InvalidArgumentException implem
         int $code = 0,
         ?\Throwable $previous = null
     ) {
-        $message = $message ?: "The attribute: [$attribute] doesn't exist 
+        $message = $message ?: "The attribute: [$attribute] doesn't exist
                                 in processes on [" . PHP_OS_FAMILY . "] OS.";
         parent::__construct($message, $code, $previous);
     }

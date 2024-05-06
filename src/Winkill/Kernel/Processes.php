@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Winkill\Kernel;
 
@@ -16,9 +18,11 @@ use Winkill\Kernel\Interface\{
 use Winkill\Kernel\OS\Common\Comparison;
 
 /**
- * Builder Pattern + Facade Pattern*
+ * Facade Pattern
+ * Builder Pattern
  *
- * @see https://refactoring.guru/design-patterns/builder
+ * @link https://refactoring.guru/design-patterns/facade
+ * @link https://refactoring.guru/design-patterns/builder
  */
 final class Processes
 {
@@ -32,9 +36,14 @@ final class Processes
     /**
      * Object Collection
      *
-     * @var array<string, bool|array<int, Process>>
+     * @var Process[]|array<int, Process>
      */
     private array $selected;
+
+    /**
+     * @var bool
+     */
+    private bool $semaphore;
 
     /**
      * @param Configuration $factory
@@ -46,22 +55,21 @@ final class Processes
     {
         $scanning_strategy = $this->factory->createScanningStrategy();
         $parsing_strategy = $this->factory->createParsingStrategy();
-        
+
         foreach ($scanning_strategy->scan() as $process) {
             $this->scanned[] = $parsing_strategy->parse($process);
         }
 
-        $this->selected['is'] = false;
-        $this->selected['processes'] = [];
+        $this->semaphore = false;
     }
 
     /**
      * Return an array of selected or scanned processes
-     * 
-     * (Note: this method is non-idempotent - in one 
-     * case, it returns one thing, in the other case, 
+     *
+     * (Note: this method is non-idempotent - in one
+     * case, it returns one thing, in the other case,
      * something else.)
-     * 
+     *
      * Usage:
      *
      * ```
@@ -83,11 +91,10 @@ final class Processes
      */
     public function get(): array
     {
-        $this->selected['is'] = ! $this->selected['is'];
-
-        return (! $this->selected['is']) 
-            ? $this->selected['processes'] 
-            : $this->scanned;
+        return match ($this->semaphore) {
+            true => $this->selected, // unlocked
+            false => $this->scanned, // locked
+        };
     }
 
     /**
@@ -110,8 +117,8 @@ final class Processes
      * );
      * ```
      *
-     * - List of all available attributes — {@see \Winkill\Kernel\OS\Windows\WindowsProcess}
-     * - List of all available compare operators — {@see \Winkill\Kernel\OS\Common\Comparison}
+     * List of all available attributes — {@see \Winkill\Kernel\OS\Windows\WindowsProcess}
+     * List of all available compare operators — {@see \Winkill\Kernel\OS\Common\Comparison}
      *
      * @param string $attribute
      * @param string $compareAs
@@ -122,25 +129,24 @@ final class Processes
      * @throws UnsupportedComparisonOperator
      */
     public function where(
-        string     $attribute,
-        string     $compareAs,
+        string $attribute,
+        string $compareAs,
         int|string $value
-    ): static
-    {
+    ): Processes {
         if (! in_array(trim($compareAs), Comparison::values())) {
             throw new UnsupportedComparisonOperator($compareAs);
         }
 
-        $this->selected['processes'] = []; // Remove all previous selected processes
-        $this->selected['is'] = false; // Begin processes selection
+        $this->selected = []; // Remove all previous selected processes
+        $this->semaphore = false; // Begin processes selection
 
         foreach ($this->scanned as $process) {
             if ($process->handleAttribute($attribute, $compareAs, $value)) {
-                $this->selected['processes'][] = $process;
+                $this->selected[] = $process;
             }
         }
 
-        $this->selected['is'] = true; // Finish processes selection
+        $this->semaphore = true; // Finish processes selection
 
         return $this;
     }
