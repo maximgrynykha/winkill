@@ -64,15 +64,15 @@ try {
 ```
 
 ### API (based on 'tasklist' command)
-| Attribute name    | Attribute value                 | Example                | Compare operator                          |
-|:------------------|:--------------------------------|:-----------------------|:------------------------------------------|
-| `process_name`    | [string]: simple name           | chrome / figma         | [string]: `=`, `!=`                       |
-|                   | [string]: name with .ext        | chrome.exe / figma.exe | [string]: `=`, `!=`                       |
-|                   | [string]: uppercase name        | Chrome.exe / Figma.exe | [string]: `=`, `!=`                       |
-| `process_id`      | [int]: number of the ID         |                        | [string]: `=`, `!=`                       |
-| `session_name`    | [string]: Console / Services    |                        | [string]: `=`, `!=`                       |
-| `session_number`  | [int]: number in range of {0-1} |                        | [string]: `=`, `!=`                       |
-| `consumed_memory` | [int]: number in Kb(kilobytes)  |                        | [string]: `>`, `<`, `=`, `>=`, `<=`, `!=` |
+| Attribute name    | Attribute value                 | Example    | Compare operator                          |
+|:------------------|:--------------------------------|:-----------|:------------------------------------------|
+| `process_name`    | [string]: name with ext         | chrome.exe | [string]: `=`, `!=`                       |
+|                   | [string]: name                  | chrome     | [string]: `=`, `!=`                       |
+|                   | [string]: ext                   | .exe       | [string]: `=`, `!=`                       |
+| `process_id`      | [int]: number of the ID         |            | [string]: `=`, `!=`                       |
+| `session_name`    | [string]: Console / Services    |            | [string]: `=`, `!=`                       |
+| `session_number`  | [int]: number in range of {0-1} |            | [string]: `=`, `!=`                       |
+| `consumed_memory` | [int]: number in Kb (kilobytes) |            | [string]: `>`, `<`, `=`, `>=`, `<=`, `!=` |
 
 ### Select processes
 

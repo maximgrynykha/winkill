@@ -6,6 +6,7 @@ namespace Winkill\Kernel\OS\Windows;
 
 use Winkill\Kernel\Exception\UnsupportedAttributeComparisonOperator;
 use Winkill\Kernel\Exception\NonexistentProcessAttribute;
+use Winkill\Kernel\Exception\UnsupportedAttributeValue;
 use Winkill\Kernel\Interface\Process;
 use Winkill\Kernel\OS\Common\Comparison;
 
@@ -36,6 +37,14 @@ final class WindowsProcess implements Process, \Stringable
     }
 
     /**
+     * @return string
+     */
+    public function __toString(): string
+    {
+        return json_encode($this, JSON_PRETTY_PRINT);
+    }
+
+    /**
      * @param string $attribute
      * @param string $compareAs
      * @param int|string $value
@@ -47,75 +56,62 @@ final class WindowsProcess implements Process, \Stringable
         string $compareAs,
         int|string $value
     ): bool {
-        $attribute = trim($attribute);
-        $compareAs = trim($compareAs);
+        $attribute = mb_strtolower(trim($attribute));
+        $compareAs = mb_strtolower(trim($compareAs));
+        $value = mb_strtolower(trim((string)$value));
 
         switch ($attribute) {
             case 'process_name':
                 if (!in_array($c = Comparison::tryFrom($compareAs), [Comparison::EQUAL, Comparison::NOT_EQUAL])) {
                     throw UnsupportedAttributeComparisonOperator::from($attribute, $compareAs);
                 }
-                $value = mb_strtolower(trim((string)$value));
-                return $this->handleProcessName($value, $c);
+
+                // chrome.exe
+                if (preg_match('/^\w+(\.\w+)+$/', $value)) {
+                    return $c->compare($this->process_name, $value); # by_name+by_ext (full match)
+                }
+                // chrome
+                if (preg_match('/^[^.]*$/', $value)) {
+                    return $c->compare(mb_strstr($this->process_name, '.', true), $value); # by_name
+                }
+                // .exe
+                if (preg_match('/^\./', $value)) {
+                    return $c->compare(mb_strstr($this->process_name, '.', false), $value); # by_ext
+                }
+
+                return $c->compare($this->process_name, $value);
             case 'process_id':
                 if (!in_array($c = Comparison::tryFrom($compareAs), [Comparison::EQUAL, Comparison::NOT_EQUAL])) {
                     throw UnsupportedAttributeComparisonOperator::from($attribute, $compareAs);
                 }
-                return $c->compare($this->process_id, +$value);
+
+                return $c->compare($this->process_id, (int)$value);
             case 'session_name':
                 if (!in_array($c = Comparison::tryFrom($compareAs), [Comparison::EQUAL, Comparison::NOT_EQUAL])) {
                     throw UnsupportedAttributeComparisonOperator::from($attribute, $compareAs);
                 }
-                $value = mb_strtolower(trim((string)$value));
+                if (!in_array($value, ['console', 'services'])) {
+                    throw UnsupportedAttributeValue::from($attribute, $value);
+                }
+
                 return $c->compare($this->session_name, $value);
             case 'session_number':
                 if (!in_array($c = Comparison::tryFrom($compareAs), [Comparison::EQUAL, Comparison::NOT_EQUAL])) {
                     throw UnsupportedAttributeComparisonOperator::from($attribute, $compareAs);
                 }
-                return $c->compare($this->session_number, +$value);
+                if (!in_array($value, [0, 1])) {
+                    throw UnsupportedAttributeValue::from($attribute, $value);
+                }
+
+                return $c->compare($this->session_number, (int)$value);
             case 'consumed_memory':
                 if (!in_array($c = Comparison::tryFrom($compareAs), Comparison::values())) {
                     throw UnsupportedAttributeComparisonOperator::from($attribute, $compareAs);
                 }
-                return $c->compare($this->consumed_memory, +$value);
+
+                return $c->compare($this->consumed_memory, (int)$value);
             default:
                 throw new NonexistentProcessAttribute($attribute);
         }
-    }
-
-    /**
-     * @param string $process_name
-     * @param Comparison $comparison
-     *
-     * @return bool
-     */
-    private function handleProcessName(string $process_name, Comparison $comparison): bool
-    {
-        $is_handled = $comparison->compare($this->process_name, $process_name);
-
-        if (str_contains($process_name, '.') || str_contains($this->process_name, '.')) {
-            $process_name_segments_in_argument = explode('.', $process_name);
-            $process_name_segments_in_instance = explode('.', $this->process_name);
-
-            $diff = array_diff(
-                $process_name_segments_in_argument,
-                $process_name_segments_in_instance
-            );
-
-            $is_handled = match ($comparison) {
-                Comparison::EQUAL => empty($diff),
-                Comparison::NOT_EQUAL => !empty($diff),
-            };
-        }
-
-        return $is_handled;
-    }
-
-    /**
-     * @return string
-     */
-    public function __toString(): string
-    {
-        return json_encode($this, JSON_PRETTY_PRINT);
     }
 }

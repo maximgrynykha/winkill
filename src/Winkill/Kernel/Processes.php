@@ -109,9 +109,9 @@ final class Processes
      *      attribute: 'process_name',
      *      compareAs: '=',
      *      value: 'chrome' # You can pass the process name in the following formats:
-     *                      # [string]: simple name    (chrome)
-     *                      # [string]: name with .ext (chrome.exe)
-     *                      # [string]: uppercase name (Chrome.exe)
+     *                      # [string]: name with ext  (chrome.exe)
+     *                      # [string]: name           (chrome)
+     *                      # [string]: ext            (.exe)
      * );
      * ```
      *

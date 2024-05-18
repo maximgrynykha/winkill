@@ -44,14 +44,11 @@ final class WindowsProcessParsing implements ProcessParsing
             $attribute = trim($attribute);
         }
 
+        $memo = $attributes['consumed_memory'];
+
         $attributes['process_id'] = (int)$attributes['process_id'];
         $attributes['session_number'] = (int)$attributes['session_number'];
-
-        $attributes['consumed_memory'] = (int)preg_replace(
-            pattern: '/\D/',
-            replacement: '',
-            subject: $attributes['consumed_memory']
-        );
+        $attributes['consumed_memory'] = (int)preg_replace('/\D/', '', $memo);
 
         return new WindowsProcess(...$attributes);
     }

@@ -46,11 +46,13 @@ final class Winkill
     public function scan(): Processes
     {
         $factory = match (PHP_OS_FAMILY) {
-            'Windows' => new CachingConfiguration(new WindowsConfiguration()),
+            'Windows' => new WindowsConfiguration(),
             'Unknown' => throw new UnknownOperatingSystem(),
             default => throw new UnsupportedOperatingSystem()
         };
 
-        return new Processes($this->factory ?: $factory);
+        return new Processes(
+            new CachingConfiguration($this->factory ?: $factory)
+        );
     }
 }
